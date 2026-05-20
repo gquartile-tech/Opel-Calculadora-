@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de Preços — Opel Etiquetas 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1c1c1a;
+    --paper: #f4f1ea;
+    --cream: #ece8dd;
+    --accent: #c13b18;
+    --accent2: #2a5c45;
+    --muted: #8c8779;
+    --border: #d5d0c5;
+    --card: #ffffff;
+    --hi: #fdf6e3;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--paper); color: var(--ink); font-family: 'DM Mono', monospace; font-size: 13px; min-height: 100vh; }
+
+  .header { background: var(--ink); color: var(--paper); padding: 22px 40px; display: flex; align-items: center; gap: 20px; border-bottom: 3px solid var(--accent); }
+  .header-title { font-family: 'DM Serif Display', serif; font-size: 22px; color: #fff; }
+  .header-sub { font-size: 10px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; }
+  .header-badge { margin-left: auto; background: var(--accent); color: #fff; font-size: 9px; padding: 4px 10px; letter-spacing: 1px; text-transform: uppercase; border-radius: 2px; }
+  .header-count { font-size: 10px; color: #7a7668; }
+
+  .layout { display: grid; grid-template-columns: 360px 1fr; min-height: calc(100vh - 75px); }
+
+  .panel-left { background: var(--cream); border-right: 1px solid var(--border); padding: 28px 24px; display: flex; flex-direction: column; gap: 22px; overflow-y: auto; }
+  .panel-right { padding: 28px 32px; overflow-y: auto; }
+
+  .sec-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; padding-bottom: 5px; border-bottom: 1px solid var(--border); }
+  .fg { display: flex; flex-direction: column; gap: 5px; }
+  .fg label { font-size: 10px; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase; }
+
+  select, input[type="number"] {
+    background: var(--card); border: 1px solid var(--border); border-radius: 3px;
+    padding: 9px 11px; font-family: 'DM Mono', monospace; font-size: 13px; color: var(--ink);
+    width: 100%; outline: none; transition: border-color 0.15s;
+  }
+  select:focus, input:focus { border-color: var(--accent); }
+  select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238c8779' fill='none' stroke-width='1.5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px; cursor: pointer; appearance: none; -webkit-appearance: none; }
+
+  .dim-row { display: grid; grid-template-columns: 1fr 16px 1fr; align-items: center; gap: 6px; }
+  .dim-sep { text-align: center; color: var(--muted); font-size: 14px; }
+
+  .area-pill { display: inline-block; background: var(--hi); border: 1px solid var(--border); padding: 4px 10px; border-radius: 20px; font-size: 11px; color: var(--muted); margin-top: 5px; }
+  .area-pill strong { color: var(--accent2); }
+
+  .cb-group { display: flex; flex-direction: column; gap: 7px; }
+  .cb { display: flex; align-items: center; gap: 9px; cursor: pointer; padding: 4px 0; }
+  .cb input[type="checkbox"] { width: 14px; height: 14px; accent-color: var(--accent); cursor: pointer; flex-shrink: 0; }
+  .cb .cbl { font-size: 12px; }
+  .cb .cbn { font-size: 10px; color: var(--muted); margin-left: auto; }
+
+  .btn-calc { background: var(--accent); color: #fff; border: none; padding: 13px; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; border-radius: 3px; width: 100%; transition: background 0.15s, transform 0.1s; }
+  .btn-calc:hover { background: #a03215; transform: translateY(-1px); }
+  .btn-reset { background: transparent; color: var(--muted); border: 1px solid var(--border); padding: 8px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; border-radius: 3px; width: 100%; transition: all 0.15s; }
+  .btn-reset:hover { border-color: var(--muted); color: var(--ink); }
+
+  .empty { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80%; gap: 14px; color: var(--muted); text-align: center; }
+  .empty-icon { font-size: 40px; opacity: 0.25; }
+  .empty p { font-size: 12px; line-height: 2; }
+
+  .res-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; padding-bottom: 18px; border-bottom: 2px solid var(--ink); margin-bottom: 22px; }
+  .res-title { font-family: 'DM Serif Display', serif; font-size: 20px; }
+  .res-sub { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
+  .conf { padding: 3px 9px; border-radius: 2px; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; flex-shrink: 0; margin-top: 3px; }
+  .c-high { background: #e8f5e9; color: #2a5c45; border: 1px solid #c8e6c9; }
+  .c-mid  { background: #fff8e1; color: #7a5c00; border: 1px solid #ffe082; }
+  .c-low  { background: #fce4ec; color: #b71c1c; border: 1px solid #ef9a9a; }
+
+  .tbl-wrap { border: 1px solid var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 20px; }
+  table { width: 100%; border-collapse: collapse; }
+  thead th { background: var(--ink); color: var(--paper); padding: 9px 14px; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 400; text-align: left; }
+  thead th:not(:first-child) { text-align: right; }
+  tbody td { padding: 11px 14px; border-bottom: 1px solid var(--border); font-size: 13px; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:nth-child(even) td { background: var(--hi); }
+  td.t-qty { color: var(--muted); font-size: 12px; }
+  td.t-unit { text-align: right; }
+  td.t-total { text-align: right; font-weight: 500; color: var(--accent2); }
+  tr.t-hl td { background: var(--ink) !important; color: #fff !important; }
+  tr.t-hl td.t-total { color: #7dd3a8 !important; }
+  tr.t-hl td.t-unit { color: #d4c9a8 !important; }
+
+  .spec-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px; }
+  .spec-item { background: var(--hi); border: 1px solid var(--border); border-radius: 3px; padding: 10px 12px; }
+  .sk { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .sv { font-size: 13px; font-weight: 500; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 16px; }
+  .chip { background: #fff3e0; border: 1px solid #ffe0b2; color: #bf360c; padding: 3px 9px; border-radius: 20px; font-size: 10px; }
+
+  .note { background: var(--hi); border-left: 3px solid var(--accent); padding: 11px 14px; border-radius: 0 3px 3px 0; margin-bottom: 14px; }
+  .note p { font-size: 11px; color: var(--muted); line-height: 1.7; }
+  .note strong { color: var(--ink); }
+
+  .disc { font-size: 10px; color: var(--muted); line-height: 1.7; padding-top: 10px; border-top: 1px solid var(--border); }
+  .err { background: #fce4ec; border: 1px solid #ef9a9a; border-radius: 3px; padding: 14px; color: #c62828; font-size: 12px; line-height: 1.6; }
+  .dsrc { font-size: 10px; color: var(--muted); text-align: right; margin-top: auto; padding-top: 8px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <div>
+    <div class="header-title">Calculadora de Preços</div>
+    <div class="header-sub">Opel Etiquetas · 2026</div>
+  </div>
+  <div class="header-count">Base: 1.429 orçamentos · Jan–Mai 2026 · 19 tipos de produto</div>
+  <div class="header-badge">Uso Interno v1</div>
+</div>
+
+<div class="layout">
+<div class="panel-left">
+
+  <div>
+    <div class="sec-label">Tipo de Produto</div>
+    <div class="fg">
+      <label>Produto</label>
+      <select id="pt" onchange="onPtChange()">
+        <option value="">— selecione —</option>
+        <optgroup label="── Bordada">
+          <option value="bordada_ad">Bordada Alta Definição (AD)</option>
+          <option value="bordada_ad_premium">Bordada AD Premium</option>
+          <option value="bordada_dd">Bordada Dupla Densidade (DD)</option>
+          <option value="bordada_cetim">Bordada em Cetim</option>
+          <option value="bordada_tafeta">Bordada Tafetá</option>
+          <option value="bordada_superbatida">Bordada Superbatida</option>
+        </optgroup>
+        <optgroup label="── Impressa em Tecido">
+          <option value="nylon_calandrado">Nylon Calandrado</option>
+          <option value="nylon_resinado">Nylon Resinado</option>
+          <option value="cetim_importado">Cetim Importado</option>
+          <option value="cetim_impresso">Cetim Impresso / Fita</option>
+          <option value="sarja">Sarja Algodão</option>
+          <option value="silicone">Silicone (Leitoso/Translúcido)</option>
+        </optgroup>
+        <optgroup label="── Tag / Papel">
+          <option value="tag_couche">Tag Papel Couchê 300g</option>
+          <option value="tag_triplex">Tag Papel Triplex 330g</option>
+        </optgroup>
+        <optgroup label="── Tecnologia Opel">
+          <option value="opelprint">Opelprint (PU/Digital)</option>
+          <option value="pu_3d">3D PU (Couro)</option>
+          <option value="opellaser">Opellaser (ABS/Metal)</option>
+          <option value="transfer_dtf">Transfer Digital DTF</option>
+          <option value="metal_zamak">Metal Zamak</option>
+        </optgroup>
+      </select>
+    </div>
+  </div>
+
+  <div id="dim-sec">
+    <div class="sec-label">Dimensões</div>
+    <div class="dim-row">
+      <div class="fg"><label>Largura (mm)</label><input type="number" id="w" placeholder="ex: 15" min="1" max="500" oninput="updArea()"></div>
+      <div class="dim-sep">×</div>
+      <div class="fg"><label>Altura (mm)</label><input type="number" id="h" placeholder="ex: 65" min="1" max="500" oninput="updArea()"></div>
+    </div>
+    <div id="area-disp" style="display:none">
+      <span class="area-pill">Área: <strong id="area-val">—</strong> mm² <span id="bracket-hint" style="color:var(--muted)"></span></span>
+    </div>
+  </div>
+
+  <div id="spec-sec">
+    <div class="sec-label">Especificações</div>
+    <div class="fg" id="colors-grp">
+      <label>Número de Cores</label>
+      <select id="colors">
+        <option value="1">1 cor</option>
+        <option value="2">2 cores</option>
+        <option value="3">3 cores</option>
+        <option value="4">4+ cores</option>
+      </select>
+    </div>
+    <div class="fg" id="fold-grp" style="margin-top:12px">
+      <label>Dobra</label>
+      <select id="fold">
+        <option value="none">Sem dobra / Corte reto</option>
+        <option value="lateral">Dobra lateral</option>
+        <option value="central">Dobra central</option>
+        <option value="both">Dobra central + lateral</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="add-sec">
+    <div class="sec-label">Adicionais & Acabamentos</div>
+    <div class="cb-group">
+      <label class="cb"><input type="checkbox" id="a-tc"><span class="cbl">Termocolante</span><span class="cbn">+10%</span></label>
+      <label class="cb"><input type="checkbox" id="a-ce"><span class="cbl">Corte especial</span><span class="cbn">+70%</span></label>
+      <label class="cb"><input type="checkbox" id="a-mc"><span class="cbl">Meio corte</span><span class="cbn">+5%</span></label>
+      <label class="cb"><input type="checkbox" id="a-cp"><span class="cbl">Corte pirógrafo</span><span class="cbn">+8%</span></label>
+      <label class="cb" id="w-ver"><input type="checkbox" id="a-vr"><span class="cbl">Verniz / UV localizado</span><span class="cbn">+8%</span></label>
+      <label class="cb" id="w-hot"><input type="checkbox" id="a-hs"><span class="cbl">Hot Stamping</span><span class="cbn">+15%</span></label>
+      <label class="cb" id="w-lam"><input type="checkbox" id="a-lm"><span class="cbl">Laminado fosco / Prolan</span><span class="cbn">+8%</span></label>
+      <label class="cb" id="w-fur"><input type="checkbox" id="a-fu"><span class="cbl">Furo (3mm)</span><span class="cbn">+3%</span></label>
+      <label class="cb" id="w-rel"><input type="checkbox" id="a-rl"><span class="cbl">Relevo (médio/alto)</span><span class="cbn">já incl.</span></label>
+      <label class="cb" id="w-df"><input type="checkbox" id="a-df"><span class="cbl">Dupla face / Dupla fase</span><span class="cbn">+12%</span></label>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:7px;margin-top:auto">
+    <button class="btn-calc" onclick="calc()">Calcular Preço</button>
+    <button class="btn-reset" onclick="reset()">Limpar formulário</button>
+  </div>
+  <div class="dsrc">1.429 pts · Jan–Mai 2026 · 578 orçamentos</div>
+</div>
+
+<div class="panel-right" id="rp">
+  <div class="empty">
+    <div class="empty-icon">◈</div>
+    <p>Selecione o produto,<br>informe as dimensões<br>e clique em <strong>Calcular Preço</strong>.</p>
+  </div>
+</div>
+</div>
+
+<script>
+const P = {"bordada_ad":[{"label":"Pequena","range":"<600mm²","example":"15x40mm","min":0,"max":600,"prices":{"1000":0.7495,"1500":0.5886,"2000":0.468,"3000":0.3877,"6000":0.1739,"10000":0.1265},"n":14},{"label":"Média P","range":"600–1200mm²","example":"15x65mm","min":600,"max":1200,"prices":{"1000":0.7003,"1500":0.6505,"2000":0.6234,"3000":0.4577,"6000":0.2345,"10000":0.1564,"20000":0.1356},"n":122},{"label":"Média G","range":"1200–2000mm²","example":"24x65mm","min":1200,"max":2000,"prices":{"1000":0.6988,"1500":0.7024,"2000":0.7045,"3000":0.5373,"6000":0.2637,"10000":0.2516,"20000":0.2248},"n":84},{"label":"Grande","range":"2000–3500mm²","example":"30x80mm","min":2000,"max":3500,"prices":{"1000":0.5346,"1500":0.7009,"2000":0.7372,"3000":0.6527,"6000":0.7159,"10000":0.8896},"n":55},{"label":"Extra","range":">3500mm²","example":"40x100mm+","min":3500,"max":99999,"prices":{"1000":1.4029,"1500":1.3193,"2000":1.1102,"3000":1.0672,"10000":0.7454,"20000":0.8885},"n":23}],"bordada_ad_premium":[{"label":"Pequena","range":"<600mm²","example":"15x40mm","min":0,"max":600,"prices":{"1000":0.7125,"1500":0.6873,"2000":0.6743,"3000":0.4162},"n":7},{"label":"Média P","range":"600–1200mm²","example":"15x65mm","min":600,"max":1200,"prices":{"1500":0.6856,"2000":0.6856,"3000":0.4456},"n":2},{"label":"Média G","range":"1200–2000mm²","example":"24x65mm","min":1200,"max":2000,"prices":{"1500":0.6856,"2000":0.6856,"3000":0.4659},"n":6},{"label":"Grande","range":"2000–3500mm²","example":"30x80mm","min":2000,"max":3500,"prices":{"1000":0.6732,"1500":0.6406,"2000":0.608,"3000":0.5789},"n":6},{"label":"Extra","range":">3500mm²","example":"40x100mm+","min":3500,"max":99999,"prices":{"10000":1.786,"20000":1.7815},"n":6}],"bordada_dd":[{"label":"Pequena","range":"<1500mm²","example":"25x55mm","min":0,"max":1500,"prices":{},"n":0},{"label":"Média","range":"1500–3500mm²","example":"30x70mm","min":1500,"max":3500,"prices":{"1000":0.7369,"3000":0.3565,"5000":0.3261,"6000":0.3261,"10000":0.2244,"20000":0.1757},"n":21},{"label":"Grande","range":">3500mm²","example":"40x85mm+","min":3500,"max":99999,"prices":{},"n":0}],"bordada_cetim":[{"label":"Pequena","range":"<1500mm²","example":"12x105mm","min":0,"max":1500,"prices":{"1500":0.6856,"2000":0.6856,"3000":0.3379,"6000":0.2126,"10000":0.1754},"n":7},{"label":"Média","range":"1500–4000mm²","example":"24x60mm","min":1500,"max":4000,"prices":{"1500":0.6529,"2000":0.6529,"3000":0.3946,"6000":0.3541},"n":7},{"label":"Grande","range":">4000mm²","example":"40x80mm+","min":4000,"max":99999,"prices":{},"n":0}],"bordada_tafeta":{"prices":{"1000":0.4025,"2000":0.411,"3000":0.316,"6000":0.2048,"10000":0.1275,"20000":0.094},"n":13},"bordada_superbatida":{"prices":{"5000":0.1352,"6000":0.1352,"10000":0.2935},"n":5},"nylon_calandrado":{"prices":{"1000":0.1724,"1500":0.1592,"2000":0.0931,"3000":0.1172,"6000":0.1221,"10000":0.1387,"20000":0.1805},"n":47},"nylon_resinado":{"prices":{"1000":0.4614,"1500":0.4614,"3000":0.3187,"6000":0.0978,"10000":0.1015,"20000":0.0694},"n":12},"cetim_importado":[{"label":"Pequena","range":"<1500mm²","example":"25x50mm","min":0,"max":1500,"prices":{"500":0.1494,"1000":0.1494,"6000":0.124,"10000":0.124},"n":2},{"label":"Média","range":"1500–3500mm²","example":"30x80mm","min":1500,"max":3500,"prices":{"500":0.1949,"1000":0.284,"1500":0.2963,"2000":0.2988,"3000":0.3066,"6000":0.255,"10000":0.2268},"n":17},{"label":"Grande","range":">3500mm²","example":"35x100mm+","min":3500,"max":99999,"prices":{},"n":0}],"cetim_impresso":{"prices":{"500":0.2268,"1000":0.2963,"1500":0.3631,"2000":0.4834,"3000":0.2713,"6000":0.2472,"10000":0.252,"20000":0.2199},"n":49},"sarja":{"prices":{"1000":0.5596,"1500":0.5374,"2000":0.5151,"3000":0.5568,"6000":0.4058,"10000":0.2938,"20000":0.2275},"n":27},"silicone":{"prices":{"500":0.3912,"1000":0.3074,"1500":0.3254,"2000":0.3435,"3000":0.2702,"6000":0.2303,"10000":0.222},"n":27},"tag_couche":[{"label":"Pequena","range":"<2000mm²","example":"44x44mm","min":0,"max":2000,"prices":{},"n":0},{"label":"Média","range":"2000–5000mm²","example":"48x88mm","min":2000,"max":5000,"prices":{"500":0.9045,"1000":0.5043,"1500":0.4826,"2000":0.2463,"3000":0.4368,"6000":0.467,"10000":0.3412,"20000":0.1827},"n":63},{"label":"Grande","range":">5000mm²","example":"55x120mm+","min":5000,"max":99999,"prices":{"10000":0.42,"20000":0.31},"n":2}],"tag_triplex":{"prices":{"5000":0.4226},"n":5},"opelprint":[{"label":"Mini","range":"<500mm²","example":"15x30mm","min":0,"max":500,"prices":{"250":1.14,"500":0.752,"1000":0.592,"2000":0.9,"3000":0.9,"5000":0.375},"n":15},{"label":"Pequena","range":"500–1500mm²","example":"25x50mm","min":500,"max":1500,"prices":{"100":2.905,"250":1.7838,"500":1.3116,"1000":1.1277,"2000":1.0357,"3000":1.2189,"5000":1.985,"10000":0.8167},"n":103},{"label":"Média","range":"1500–3500mm²","example":"40x60mm","min":1500,"max":3500,"prices":{"100":7.1608,"250":4.5565,"500":4.5137,"1000":3.6559,"2000":1.986,"3000":2.05,"5000":1.7433},"n":97},{"label":"Grande","range":"3500–7000mm²","example":"65x80mm","min":3500,"max":7000,"prices":{"100":8.734,"250":6.0522,"500":5.1017,"1000":5.0,"2000":3.005,"3000":3.005,"5000":3.1875},"n":43},{"label":"Extra","range":">7000mm²","example":"80x100mm+","min":7000,"max":99999,"prices":{"100":11.45,"250":11.56,"500":8.0943,"1000":7.3133,"5000":4.2},"n":21}],"pu_3d":[{"label":"Mini","range":"<300mm²","example":"10x25mm","min":0,"max":300,"prices":{},"n":0},{"label":"Pequena","range":"300–900mm²","example":"15x45mm","min":300,"max":900,"prices":{"250":0.9344,"500":1.0003,"1000":0.6129,"2000":0.5233,"3000":0.5632,"6000":0.4872,"10000":0.4088},"n":89},{"label":"Média","range":"900–2500mm²","example":"30x60mm","min":900,"max":2500,"prices":{"250":1.4729,"500":1.2437,"1000":0.9153,"2000":1.1,"3000":0.92},"n":16},{"label":"Grande","range":"2500–5000mm²","example":"50x80mm","min":2500,"max":5000,"prices":{"250":3.1755,"500":2.8858,"2000":0.66,"3000":0.66},"n":69},{"label":"Extra","range":">5000mm²","example":"60x120mm+","min":5000,"max":99999,"prices":{"250":5.096,"500":2.95,"1000":2.1467,"6000":3.24,"10000":3.01},"n":31}],"opellaser":{"prices":{"100":17.985,"250":6.968,"500":8.3033,"1000":2.0719,"2000":3.9396,"5000":1.0675},"n":21},"transfer_dtf":{"prices":{"250":0.8941,"500":0.8928,"1000":0.6312,"2000":0.87,"3000":0.7017,"5000":0.5873},"n":15},"metal_zamak":[{"label":"Mini","range":"<250mm²","example":"10x20mm","min":0,"max":250,"prices":{"1000":0.6873},"n":1},{"label":"Pequena","range":"250–600mm²","example":"15x40mm","min":250,"max":600,"prices":{"1000":1.6308,"2000":2.1093,"5000":0.9953},"n":12},{"label":"Média","range":"600–1500mm²","example":"20x50mm","min":600,"max":1500,"prices":{"250":1.72,"500":1.25,"1000":3.455,"2000":7.0,"5000":6.45},"n":9},{"label":"Grande","range":">1500mm²","example":"43x50mm+","min":1500,"max":99999,"prices":{"1000":15.93},"n":2}]};
+
+const NAMES = {
+  bordada_ad:'Bordada Alta Definição (AD)', bordada_ad_premium:'Bordada AD Premium',
+  bordada_dd:'Bordada Dupla Densidade (DD)', bordada_cetim:'Bordada em Cetim',
+  bordada_tafeta:'Bordada Tafetá', bordada_superbatida:'Bordada Superbatida',
+  nylon_calandrado:'Nylon Calandrado', nylon_resinado:'Nylon Resinado',
+  cetim_importado:'Cetim Importado', cetim_impresso:'Cetim Impresso / Fita',
+  sarja:'Sarja Algodão', silicone:'Silicone (Leitoso/Translúcido)',
+  tag_couche:'Tag Papel Couchê 300g', tag_triplex:'Tag Papel Triplex 330g',
+  opelprint:'Opelprint (PU/Digital)', pu_3d:'3D PU (Couro)',
+  opellaser:'Opellaser (ABS/Metal)', transfer_dtf:'Transfer Digital DTF',
+  metal_zamak:'Metal Zamak'
+};
+
+const SURCHARGES = [
+  {id:'a-tc',label:'Termocolante',mult:1.10},
+  {id:'a-ce',label:'Corte especial',mult:1.70},
+  {id:'a-mc',label:'Meio corte',mult:1.05},
+  {id:'a-cp',label:'Corte pirógrafo',mult:1.08},
+  {id:'a-vr',label:'Verniz / UV',mult:1.08},
+  {id:'a-hs',label:'Hot Stamping',mult:1.15},
+  {id:'a-lm',label:'Laminado/Prolan',mult:1.08},
+  {id:'a-fu',label:'Furo 3mm',mult:1.03},
+  {id:'a-rl',label:'Relevo',mult:1.0},
+  {id:'a-df',label:'Dupla face',mult:1.12},
+];
+
+const TAG_ONLY = ['tag_couche','tag_triplex'];
+const FLAT_FOLD = ['nylon_calandrado','nylon_resinado','sarja','cetim_impresso','silicone','transfer_dtf','opellaser','metal_zamak','tag_couche','tag_triplex'];
+const TECH_ONLY = ['opelprint','pu_3d','opellaser','transfer_dtf','metal_zamak'];
+
+function onPtChange() {
+  const pt = document.getElementById('pt').value;
+  const isTag = TAG_ONLY.includes(pt);
+  const isTech = TECH_ONLY.includes(pt);
+  document.getElementById('fold-grp').style.display = FLAT_FOLD.includes(pt) ? 'none' : 'block';
+  document.getElementById('colors-grp').style.display = (pt === 'opelprint' || pt === 'pu_3d' || pt === 'metal_zamak') ? 'none' : 'flex';
+  ['w-ver','w-hot','w-lam','w-fur'].forEach(id => {
+    document.getElementById(id).style.display = (isTag || isTech) ? 'flex' : 'none';
+  });
+  document.getElementById('w-rel').style.display = isTech ? 'flex' : 'none';
+  document.getElementById('w-df').style.display = (pt==='opellaser'||pt==='opelprint') ? 'flex' : 'none';
+  updArea();
+}
+
+function updArea() {
+  const w = parseFloat(document.getElementById('w').value);
+  const h = parseFloat(document.getElementById('h').value);
+  const disp = document.getElementById('area-disp');
+  if (w > 0 && h > 0) {
+    const a = w * h;
+    document.getElementById('area-val').textContent = a.toFixed(0);
+    const pt = document.getElementById('pt').value;
+    const b = getBracket(pt, a);
+    document.getElementById('bracket-hint').textContent = b ? `· ${b.label} (${b.range})` : '';
+    disp.style.display = 'block';
+  } else { disp.style.display = 'none'; }
+}
+
+function getBracket(pt, area) {
+  const data = P[pt];
+  if (!data || !Array.isArray(data)) return null;
+  return data.find(b => area > b.min && area <= b.max) || data[data.length-1];
+}
+
+function interp(priceTable, qty) {
+  const keys = Object.keys(priceTable).map(Number).sort((a,b)=>a-b);
+  if (!keys.length) return null;
+  if (qty <= keys[0]) return priceTable[keys[0]];
+  if (qty >= keys[keys.length-1]) return priceTable[keys[keys.length-1]];
+  for (let i = 0; i < keys.length-1; i++) {
+    if (qty >= keys[i] && qty <= keys[i+1]) {
+      const t = (Math.log(qty)-Math.log(keys[i])) / (Math.log(keys[i+1])-Math.log(keys[i]));
+      return priceTable[keys[i]] + t*(priceTable[keys[i+1]]-priceTable[keys[i]]);
+    }
+  }
+  return null;
+}
+
+function getQtyBreaks(pt) {
+  if (['opelprint','pu_3d'].includes(pt)) return [100,250,500,1000,2000,3000,5000,10000];
+  if (['opellaser','metal_zamak'].includes(pt)) return [100,250,500,1000,2000,5000];
+  if (['transfer_dtf'].includes(pt)) return [250,500,1000,2000,3000,5000];
+  if (['tag_couche','tag_triplex','cetim_importado'].includes(pt)) return [500,1000,1500,2000,3000,6000,10000,20000];
+  if (['bordada_dd','bordada_superbatida'].includes(pt)) return [3000,5000,6000,10000,20000];
+  return [1000,1500,2000,3000,6000,10000,20000];
+}
+
+function conf(n) {
+  if (n >= 60) return {cls:'c-high',txt:'Alta confiança'};
+  if (n >= 15) return {cls:'c-mid',txt:'Confiança média'};
+  return {cls:'c-low',txt:'Dados limitados'};
+}
+
+function fmt(n, d=4) { return n.toFixed(d).replace('.',','); }
+function fmtBRL(n) { return n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+
+function calc() {
+  const pt = document.getElementById('pt').value;
+  if (!pt) { showErr('Selecione o tipo de produto.'); return; }
+  const w = parseFloat(document.getElementById('w').value);
+  const h = parseFloat(document.getElementById('h').value);
+  if (!w||!h||w<=0||h<=0) { showErr('Informe largura e altura.'); return; }
+  const area = w * h;
+  const colors = parseInt(document.getElementById('colors').value)||1;
+  const fold = document.getElementById('fold').value;
+
+  const data = P[pt];
+  if (!data) { showErr('Produto sem dados.'); return; }
+
+  let priceTable, sampleN, bracketInfo;
+  if (Array.isArray(data)) {
+    const b = getBracket(pt, area);
+    if (!b || !Object.keys(b.prices).length) { showErr(`Sem dados suficientes para área ${area.toFixed(0)}mm² neste produto. Tente outro tamanho ou consulte a equipe.`); return; }
+    priceTable = b.prices; sampleN = b.n; bracketInfo = b;
+  } else {
+    if (!Object.keys(data.prices).length) { showErr('Dados insuficientes para este produto.'); return; }
+    priceTable = data.prices; sampleN = data.n; bracketInfo = null;
+  }
+
+  // Surcharges
+  let mult = 1.0;
+  const active = [];
+  for (const s of SURCHARGES) {
+    const el = document.getElementById(s.id);
+    if (el && el.offsetParent !== null && el.checked && s.mult > 1) {
+      mult *= s.mult; active.push(s);
+    }
+  }
+  if (colors > 1) {
+    const cm = 1 + (colors-1)*0.08;
+    mult *= cm;
+    active.push({label:`+${colors-1} cor(es)`, mult: cm});
+  }
+
+  // Build table
+  const breaks = getQtyBreaks(pt);
+  const rows = breaks.map(qty => {
+    const bp = interp(priceTable, qty);
+    if (bp === null) return null;
+    const up = bp * mult;
+    return {qty, up: Math.round(up*10000)/10000, tot: Math.round(qty*up*100)/100};
+  }).filter(Boolean);
+
+  if (!rows.length) { showErr('Não foi possível calcular preços.'); return; }
+
+  const c = conf(sampleN);
+  const specW = FLAT_FOLD.includes(pt) ? '—' : (fold==='none'?'Sem dobra':fold==='lateral'?'Lateral':fold==='central'?'Central':'Central+Lateral');
+
+  document.getElementById('rp').innerHTML = `
+    <div class="res-head">
+      <div>
+        <div class="res-title">${NAMES[pt]}</div>
+        <div class="res-sub">${w}×${h}mm · ${area.toFixed(0)}mm²${bracketInfo?' · '+bracketInfo.range:''}</div>
+      </div>
+      <div class="conf ${c.cls}">${c.txt}</div>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Quantidade</th><th>Vlr. Unitário</th><th>Vlr. Total</th></tr></thead>
+        <tbody>
+          ${rows.map((r,i)=>`
+            <tr class="${i===1?'t-hl':''}">
+              <td class="t-qty">${r.qty.toLocaleString('pt-BR')} un.</td>
+              <td class="t-unit">R$ ${fmt(r.up)}</td>
+              <td class="t-total">R$ ${fmtBRL(r.tot)}</td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="spec-grid">
+      <div class="spec-item"><div class="sk">Dimensão</div><div class="sv">${w}×${h}mm</div></div>
+      <div class="spec-item"><div class="sk">Área</div><div class="sv">${area.toFixed(0)} mm²</div></div>
+      <div class="spec-item"><div class="sk">Faixa</div><div class="sv">${bracketInfo?bracketInfo.label:'—'}</div></div>
+      <div class="spec-item"><div class="sk">Cores</div><div class="sv">${colors===1?'1 cor':colors+' cores'}</div></div>
+      <div class="spec-item"><div class="sk">Dobra</div><div class="sv">${specW}</div></div>
+      <div class="spec-item"><div class="sk">Multiplicador</div><div class="sv">×${mult.toFixed(3)}</div></div>
+    </div>
+
+    ${active.length?`<div class="chips">${active.map(s=>`<div class="chip">${s.label} ×${s.mult.toFixed(2)}</div>`).join('')}</div>`:''}
+
+    <div class="note">
+      <p>
+        <strong>Base:</strong> ${sampleN} orçamentos reais · ${NAMES[pt]}<br>
+        <strong>Destaque:</strong> A linha em destaque (fundo escuro) indica a quantidade de referência mais comum para este produto.<br>
+        <strong>Variação:</strong> Pode haver variação de ±10% nas quantidades. Preços são estimativas — variações por design, material e condições comerciais podem ocorrer.
+      </p>
+    </div>
+
+    <div class="disc">
+      Orçamento válido por 15 dias · Prazo de produção a confirmar · Frete por conta do cliente ·
+      Pequenas variações de cor entre lotes podem ocorrer.
+    </div>
+  `;
+}
+
+function showErr(msg) {
+  document.getElementById('rp').innerHTML = `<div class="err">⚠ ${msg}</div>`;
+}
+
+function reset() {
+  ['pt','colors','fold'].forEach(id => document.getElementById(id).value = id==='fold'?'none':id==='colors'?'1':'');
+  ['w','h'].forEach(id => document.getElementById(id).value = '');
+  SURCHARGES.forEach(s => { const el=document.getElementById(s.id); if(el) el.checked=false; });
+  document.getElementById('area-disp').style.display='none';
+  ['w-ver','w-hot','w-lam','w-fur','w-rel','w-df'].forEach(id => document.getElementById(id).style.display='none');
+  document.getElementById('rp').innerHTML = `<div class="empty"><div class="empty-icon">◈</div><p>Selecione o produto,<br>informe as dimensões<br>e clique em <strong>Calcular Preço</strong>.</p></div>`;
+}
+</script>
+</body>
+</html>
