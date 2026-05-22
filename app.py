@@ -1,11 +1,15 @@
 from flask import Flask, send_from_directory
 import os
 
-app = Flask(__name__, static_folder='static', template_folder='.')
+app = Flask(__name__, static_folder='.', template_folder='.')
 
 @app.route('/')
 def index():
     return send_from_directory('.', 'index.html')
+
+@app.route('/rules.js')
+def rules():
+    return send_from_directory('.', 'rules.js', mimetype='application/javascript')
 
 @app.route('/health')
 def health():

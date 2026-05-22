@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Calculadora de Preços — Opel Etiquetas 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="/rules.js"></script>
 <style>
   :root {
     --ink: #1c1c1a; --paper: #f4f1ea; --cream: #ece8dd; --accent: #c13b18;
@@ -14,25 +15,25 @@
     --ok-bg: #f0fdf4; --ok-border: #22c55e; --ok-text: #166534;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--paper); color: var(--ink); font-family: 'DM Mono', monospace; font-size: 13px; min-height: 100vh; }
+  body { background: var(--paper); color: var(--ink); font-family: 'DM Sans', sans-serif; font-size: 13px; min-height: 100vh; }
 
-  .header { background: var(--ink); color: var(--paper); padding: 20px 40px; display: flex; align-items: center; gap: 20px; border-bottom: 3px solid var(--accent); }
-  .header-title { font-family: 'DM Serif Display', serif; font-size: 21px; color: #fff; }
-  .header-sub { font-size: 10px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; }
-  .header-badge { margin-left: auto; background: var(--accent); color: #fff; font-size: 9px; padding: 4px 10px; letter-spacing: 1px; text-transform: uppercase; border-radius: 2px; }
-  .header-count { font-size: 10px; color: #7a7668; }
+  .header { background: var(--ink); color: var(--paper); padding: 18px 40px; display: flex; align-items: center; gap: 20px; border-bottom: 3px solid var(--accent); }
+  .header-title { font-family: 'DM Serif Display', serif; font-size: 20px; color: #fff; }
+  .header-sub { font-size: 10px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; font-family: 'DM Mono', monospace; }
+  .header-badge { margin-left: auto; background: var(--accent); color: #fff; font-size: 9px; padding: 4px 10px; letter-spacing: 1px; text-transform: uppercase; border-radius: 2px; font-family: 'DM Mono', monospace; }
+  .header-info { font-size: 10px; color: #7a7668; font-family: 'DM Mono', monospace; }
 
-  .layout { display: grid; grid-template-columns: 380px 1fr; min-height: calc(100vh - 73px); }
-  .panel-left { background: var(--cream); border-right: 1px solid var(--border); padding: 26px 22px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; }
-  .panel-right { padding: 26px 32px; overflow-y: auto; }
+  .layout { display: grid; grid-template-columns: 360px 1fr; min-height: calc(100vh - 71px); }
+  .panel-left { background: var(--cream); border-right: 1px solid var(--border); padding: 24px 20px; display: flex; flex-direction: column; gap: 18px; overflow-y: auto; }
+  .panel-right { padding: 24px 32px; overflow-y: auto; }
 
-  .sec-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; padding-bottom: 5px; border-bottom: 1px solid var(--border); }
-  .fg { display: flex; flex-direction: column; gap: 5px; }
-  .fg label { font-size: 10px; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase; }
+  .sec-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; padding-bottom: 5px; border-bottom: 1px solid var(--border); font-family: 'DM Mono', monospace; }
+  .fg { display: flex; flex-direction: column; gap: 4px; }
+  .fg label { font-size: 10px; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase; font-family: 'DM Mono', monospace; }
 
   select, input[type="number"] {
     background: var(--card); border: 1px solid var(--border); border-radius: 3px;
-    padding: 9px 11px; font-family: 'DM Mono', monospace; font-size: 13px; color: var(--ink);
+    padding: 8px 10px; font-family: 'DM Mono', monospace; font-size: 13px; color: var(--ink);
     width: 100%; outline: none; transition: border-color 0.15s;
   }
   select:focus, input:focus { border-color: var(--accent); }
@@ -43,83 +44,77 @@
 
   .dim-row { display: grid; grid-template-columns: 1fr 16px 1fr; align-items: center; gap: 6px; }
   .dim-sep { text-align: center; color: var(--muted); font-size: 14px; }
-
-  /* Dimension info box */
-  .dim-info { margin-top: 8px; }
-  .dim-ref { background: var(--hi); border: 1px solid var(--border); border-radius: 3px; padding: 8px 11px; font-size: 11px; color: var(--muted); line-height: 1.6; }
+  .dim-ref { background: var(--hi); border: 1px solid var(--border); border-radius: 3px; padding: 7px 10px; font-size: 10px; color: var(--muted); line-height: 1.6; margin-bottom: 8px; font-family: 'DM Mono', monospace; }
   .dim-ref strong { color: var(--ink); }
-  .dim-ref .examples { margin-top: 4px; font-size: 10px; color: var(--muted); }
-
-  /* Validation alerts */
-  .val-alert { border-radius: 3px; padding: 8px 11px; font-size: 11px; line-height: 1.6; margin-top: 6px; display: flex; gap: 8px; align-items: flex-start; }
+  .val-alert { border-radius: 3px; padding: 7px 10px; font-size: 11px; line-height: 1.6; margin-top: 5px; display: flex; gap: 7px; align-items: flex-start; font-family: 'DM Sans', sans-serif; }
   .val-alert.warn { background: var(--warn-bg); border: 1px solid var(--warn-border); color: var(--warn-text); }
   .val-alert.err  { background: var(--err-bg);  border: 1px solid var(--err-border);  color: var(--err-text); }
   .val-alert.ok   { background: var(--ok-bg);   border: 1px solid var(--ok-border);   color: var(--ok-text); }
-  .val-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
-
-  /* Area pill */
-  .area-pill { display: inline-block; background: var(--hi); border: 1px solid var(--border); padding: 4px 10px; border-radius: 20px; font-size: 11px; color: var(--muted); margin-top: 5px; }
+  .val-icon { font-size: 13px; flex-shrink: 0; }
+  .area-pill { display: inline-block; background: var(--hi); border: 1px solid var(--border); padding: 3px 9px; border-radius: 20px; font-size: 10px; color: var(--muted); margin-top: 5px; font-family: 'DM Mono', monospace; }
   .area-pill strong { color: var(--accent2); }
+  .size-chip-label { font-size: 9px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-top: 5px; margin-bottom: 3px; font-family: 'DM Mono', monospace; }
+  .common-sizes { display: flex; flex-wrap: wrap; gap: 4px; }
+  .size-chip { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 2px 8px; font-size: 10px; color: var(--muted); cursor: pointer; transition: all 0.1s; user-select: none; font-family: 'DM Mono', monospace; }
+  .size-chip:hover { border-color: var(--accent); color: var(--accent); }
 
-  /* Common sizes chips */
-  .common-sizes { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
-  .size-chip { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 3px 9px; font-size: 10px; color: var(--muted); cursor: pointer; transition: all 0.1s; user-select: none; }
-  .size-chip:hover { border-color: var(--accent); color: var(--accent); background: #fff5f2; }
-  .size-chip-label { font-size: 9px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-top: 6px; margin-bottom: 2px; }
-
-  .cb-group { display: flex; flex-direction: column; gap: 7px; }
-  .cb { display: flex; align-items: center; gap: 9px; cursor: pointer; padding: 4px 0; }
-  .cb input[type="checkbox"] { width: 14px; height: 14px; accent-color: var(--accent); cursor: pointer; flex-shrink: 0; }
+  .cb-group { display: flex; flex-direction: column; gap: 6px; }
+  .cb { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 3px 0; }
+  .cb input[type="checkbox"] { width: 13px; height: 13px; accent-color: var(--accent); cursor: pointer; flex-shrink: 0; }
   .cb .cbl { font-size: 12px; }
-  .cb .cbn { font-size: 10px; color: var(--muted); margin-left: auto; }
+  .cb .cbn { font-size: 10px; color: var(--muted); margin-left: auto; font-family: 'DM Mono', monospace; }
 
-  .btn-calc { background: var(--accent); color: #fff; border: none; padding: 13px; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; border-radius: 3px; width: 100%; transition: background 0.15s, transform 0.1s; }
+  .btn-calc { background: var(--accent); color: #fff; border: none; padding: 12px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; border-radius: 3px; width: 100%; transition: background 0.15s, transform 0.1s; }
   .btn-calc:hover { background: #a03215; transform: translateY(-1px); }
   .btn-calc:disabled { background: #a09888; cursor: not-allowed; transform: none; }
-  .btn-reset { background: transparent; color: var(--muted); border: 1px solid var(--border); padding: 8px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; border-radius: 3px; width: 100%; transition: all 0.15s; }
+  .btn-reset { background: transparent; color: var(--muted); border: 1px solid var(--border); padding: 7px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; border-radius: 3px; width: 100%; transition: all 0.15s; }
   .btn-reset:hover { border-color: var(--muted); color: var(--ink); }
 
-  /* Results */
-  .empty { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80%; gap: 14px; color: var(--muted); text-align: center; }
-  .empty-icon { font-size: 40px; opacity: 0.25; }
-  .empty p { font-size: 12px; line-height: 2; }
+  .empty { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80%; gap: 12px; color: var(--muted); text-align: center; }
+  .empty-icon { font-size: 36px; opacity: 0.2; }
+  .empty p { font-size: 12px; line-height: 2; font-family: 'DM Mono', monospace; }
 
-  .res-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; padding-bottom: 18px; border-bottom: 2px solid var(--ink); margin-bottom: 22px; }
+  .res-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; padding-bottom: 16px; border-bottom: 2px solid var(--ink); margin-bottom: 20px; }
   .res-title { font-family: 'DM Serif Display', serif; font-size: 20px; }
-  .res-sub { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
-  .conf { padding: 3px 9px; border-radius: 2px; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; flex-shrink: 0; margin-top: 3px; }
+  .res-sub { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-top: 3px; }
+  .conf { padding: 3px 8px; border-radius: 2px; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; flex-shrink: 0; margin-top: 2px; font-family: 'DM Mono', monospace; }
   .c-high { background: #e8f5e9; color: #2a5c45; border: 1px solid #c8e6c9; }
   .c-mid  { background: #fff8e1; color: #7a5c00; border: 1px solid #ffe082; }
   .c-low  { background: #fce4ec; color: #b71c1c; border: 1px solid #ef9a9a; }
 
-  .tbl-wrap { border: 1px solid var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 20px; }
+  /* Price table */
+  .tbl-wrap { border: 1px solid var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 18px; }
   table { width: 100%; border-collapse: collapse; }
-  thead th { background: var(--ink); color: var(--paper); padding: 9px 14px; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 400; text-align: left; }
+  thead th { background: var(--ink); color: var(--paper); padding: 9px 14px; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 400; text-align: left; font-family: 'DM Mono', monospace; }
   thead th:not(:first-child) { text-align: right; }
   tbody td { padding: 11px 14px; border-bottom: 1px solid var(--border); font-size: 13px; }
   tbody tr:last-child td { border-bottom: none; }
   tbody tr:nth-child(even) td { background: var(--hi); }
-  td.t-qty { color: var(--muted); font-size: 12px; }
-  td.t-unit { text-align: right; }
-  td.t-total { text-align: right; font-weight: 500; color: var(--accent2); }
+  td.t-qty { color: var(--muted); font-size: 12px; font-family: 'DM Mono', monospace; }
+  td.t-unit { text-align: right; font-family: 'DM Mono', monospace; }
+  td.t-total { text-align: right; font-weight: 600; color: var(--accent2); font-family: 'DM Mono', monospace; }
   tr.t-hl td { background: var(--ink) !important; color: #fff !important; }
   tr.t-hl td.t-total { color: #7dd3a8 !important; }
   tr.t-hl td.t-unit { color: #d4c9a8 !important; }
 
-  .spec-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px; }
-  .spec-item { background: var(--hi); border: 1px solid var(--border); border-radius: 3px; padding: 10px 12px; }
-  .sk { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .spec-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-bottom: 16px; }
+  .spec-item { background: var(--hi); border: 1px solid var(--border); border-radius: 3px; padding: 9px 11px; }
+  .sk { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; font-family: 'DM Mono', monospace; }
   .sv { font-size: 13px; font-weight: 500; }
 
-  .chips { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 16px; }
-  .chip { background: #fff3e0; border: 1px solid #ffe0b2; color: #bf360c; padding: 3px 9px; border-radius: 20px; font-size: 10px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+  .chip { background: #fff3e0; border: 1px solid #ffe0b2; color: #bf360c; padding: 2px 8px; border-radius: 20px; font-size: 10px; font-family: 'DM Mono', monospace; }
 
-  .note { background: var(--hi); border-left: 3px solid var(--accent); padding: 11px 14px; border-radius: 0 3px 3px 0; margin-bottom: 14px; }
-  .note p { font-size: 11px; color: var(--muted); line-height: 1.7; }
+  .note { background: var(--hi); border-left: 3px solid var(--accent); padding: 10px 13px; border-radius: 0 3px 3px 0; margin-bottom: 12px; }
+  .note p { font-size: 11px; color: var(--muted); line-height: 1.7; font-family: 'DM Sans', sans-serif; }
   .note strong { color: var(--ink); }
-  .disc { font-size: 10px; color: var(--muted); line-height: 1.7; padding-top: 10px; border-top: 1px solid var(--border); }
-  .err-box { background: #fce4ec; border: 1px solid #ef9a9a; border-radius: 3px; padding: 14px; color: #c62828; font-size: 12px; line-height: 1.6; }
-  .dsrc { font-size: 10px; color: var(--muted); text-align: right; margin-top: auto; padding-top: 8px; }
+
+  /* Price type badge */
+  .price-type-badge { display: inline-flex; align-items: center; gap: 6px; background: #fff8e1; border: 1px solid #ffe082; border-radius: 3px; padding: 5px 11px; font-size: 10px; color: #7a5c00; font-family: 'DM Mono', monospace; margin-bottom: 14px; letter-spacing: 0.5px; }
+
+  .disc { font-size: 10px; color: var(--muted); line-height: 1.7; padding-top: 10px; border-top: 1px solid var(--border); font-family: 'DM Mono', monospace; }
+  .err-box { background: #fce4ec; border: 1px solid #ef9a9a; border-radius: 3px; padding: 13px; color: #c62828; font-size: 12px; line-height: 1.6; }
+  .dsrc { font-size: 10px; color: var(--muted); text-align: right; margin-top: auto; padding-top: 6px; font-family: 'DM Mono', monospace; }
 </style>
 </head>
 <body>
@@ -128,13 +123,12 @@
     <div class="header-title">Calculadora de Preços</div>
     <div class="header-sub">Opel Etiquetas · 2026</div>
   </div>
-  <div class="header-count">Base: 1.429 orçamentos · Jan–Mai 2026 · 19 tipos</div>
-  <div class="header-badge">Uso Interno v1</div>
+  <div class="header-info" id="header-info">Carregando regras...</div>
+  <div class="header-badge">Uso Interno v2</div>
 </div>
 
 <div class="layout">
 <div class="panel-left">
-
   <div>
     <div class="sec-label">Tipo de Produto</div>
     <div class="fg">
@@ -143,7 +137,6 @@
         <option value="">— selecione —</option>
         <optgroup label="── Bordada">
           <option value="bordada_ad">Bordada Alta Definição (AD)</option>
-          <option value="bordada_ad_premium">Bordada AD Premium</option>
           <option value="bordada_dd">Bordada Dupla Densidade (DD)</option>
           <option value="bordada_cetim">Bordada em Cetim</option>
           <option value="bordada_tafeta">Bordada Tafetá</option>
@@ -174,28 +167,19 @@
 
   <div id="dim-sec">
     <div class="sec-label">Dimensões</div>
-
-    <!-- Reference box shown after product selection -->
-    <div id="dim-ref-box" class="dim-ref" style="display:none; margin-bottom:10px">
+    <div id="dim-ref-box" class="dim-ref" style="display:none">
       <strong id="dim-ref-range">—</strong><br>
-      <span class="examples" id="dim-ref-examples"></span>
+      <span id="dim-ref-examples"></span>
     </div>
-
     <div class="dim-row">
       <div class="fg"><label>Largura (mm)</label><input type="number" id="w" placeholder="ex: 15" min="1" max="500" oninput="onDimChange()"></div>
       <div class="dim-sep">×</div>
       <div class="fg"><label>Altura (mm)</label><input type="number" id="h" placeholder="ex: 65" min="1" max="500" oninput="onDimChange()"></div>
     </div>
-
-    <!-- Validation alert -->
     <div id="dim-alert" style="display:none"></div>
-
-    <!-- Area + bracket -->
-    <div id="area-disp" style="display:none; margin-top:6px">
+    <div id="area-disp" style="display:none; margin-top:5px">
       <span class="area-pill">Área: <strong id="area-val">—</strong> mm² <span id="bracket-hint" style="color:var(--muted)"></span></span>
     </div>
-
-    <!-- Common sizes quick-fill -->
     <div id="common-sizes-wrap" style="display:none">
       <div class="size-chip-label">Tamanhos comuns</div>
       <div class="common-sizes" id="common-sizes"></div>
@@ -213,7 +197,7 @@
         <option value="4">4+ cores</option>
       </select>
     </div>
-    <div class="fg" id="fold-grp" style="margin-top:12px">
+    <div class="fg" id="fold-grp" style="margin-top:10px">
       <label>Dobra</label>
       <select id="fold">
         <option value="none">Sem dobra / Corte reto</option>
@@ -227,217 +211,166 @@
   <div id="add-sec">
     <div class="sec-label">Adicionais & Acabamentos</div>
     <div class="cb-group">
-      <label class="cb"><input type="checkbox" id="a-tc"><span class="cbl">Termocolante</span><span class="cbn">+10%</span></label>
-      <label class="cb"><input type="checkbox" id="a-ce"><span class="cbl">Corte especial</span><span class="cbn">+70%</span></label>
-      <label class="cb"><input type="checkbox" id="a-mc"><span class="cbl">Meio corte</span><span class="cbn">+5%</span></label>
-      <label class="cb"><input type="checkbox" id="a-cp"><span class="cbl">Corte pirógrafo</span><span class="cbn">+8%</span></label>
-      <label class="cb" id="w-ver"><input type="checkbox" id="a-vr"><span class="cbl">Verniz / UV localizado</span><span class="cbn">+8%</span></label>
-      <label class="cb" id="w-hot"><input type="checkbox" id="a-hs"><span class="cbl">Hot Stamping</span><span class="cbn">+15%</span></label>
-      <label class="cb" id="w-lam"><input type="checkbox" id="a-lm"><span class="cbl">Laminado fosco / Prolan</span><span class="cbn">+8%</span></label>
-      <label class="cb" id="w-fur"><input type="checkbox" id="a-fu"><span class="cbl">Furo (3mm)</span><span class="cbn">+3%</span></label>
+      <label class="cb"><input type="checkbox" id="a-tc"><span class="cbl">Termocolante</span><span class="cbn" id="lbl-a-tc">+10%</span></label>
+      <label class="cb"><input type="checkbox" id="a-ce"><span class="cbl">Corte especial</span><span class="cbn" id="lbl-a-ce">+70%</span></label>
+      <label class="cb"><input type="checkbox" id="a-mc"><span class="cbl">Meio corte</span><span class="cbn" id="lbl-a-mc">+5%</span></label>
+      <label class="cb"><input type="checkbox" id="a-cp"><span class="cbl">Corte pirógrafo</span><span class="cbn" id="lbl-a-cp">+8%</span></label>
+      <label class="cb" id="w-ver"><input type="checkbox" id="a-vr"><span class="cbl">Verniz / UV localizado</span><span class="cbn" id="lbl-a-vr">+8%</span></label>
+      <label class="cb" id="w-hot"><input type="checkbox" id="a-hs"><span class="cbl">Hot Stamping</span><span class="cbn" id="lbl-a-hs">+15%</span></label>
+      <label class="cb" id="w-lam"><input type="checkbox" id="a-lm"><span class="cbl">Laminado fosco / Prolan</span><span class="cbn" id="lbl-a-lm">+8%</span></label>
+      <label class="cb" id="w-fur"><input type="checkbox" id="a-fu"><span class="cbl">Furo (3mm)</span><span class="cbn" id="lbl-a-fu">+3%</span></label>
       <label class="cb" id="w-rel"><input type="checkbox" id="a-rl"><span class="cbl">Relevo (médio/alto)</span><span class="cbn">já incl.</span></label>
-      <label class="cb" id="w-df"><input type="checkbox" id="a-df"><span class="cbl">Dupla face / Dupla fase</span><span class="cbn">+12%</span></label>
+      <label class="cb" id="w-df"><input type="checkbox" id="a-df"><span class="cbl">Dupla face / Dupla fase</span><span class="cbn" id="lbl-a-df">+12%</span></label>
     </div>
   </div>
 
-  <div style="display:flex;flex-direction:column;gap:7px;margin-top:auto">
+  <div style="display:flex;flex-direction:column;gap:6px;margin-top:auto">
     <button class="btn-calc" id="btn-calc" onclick="calc()">Calcular Preço</button>
-    <button class="btn-reset" onclick="reset()">Limpar formulário</button>
+    <button class="btn-reset" onclick="resetForm()">Limpar formulário</button>
   </div>
-  <div class="dsrc">5.459 pts · Jan 2025–Mai 2026 · 4.133 PDFs</div>
+  <div class="dsrc" id="dsrc-label">—</div>
 </div>
 
 <div class="panel-right" id="rp">
   <div class="empty">
     <div class="empty-icon">◈</div>
-    <p>Selecione o produto,<br>informe as dimensões<br>e clique em <strong>Calcular Preço</strong>.</p>
+    <p>Selecione o produto,<br>informe as dimensões<br>e clique em Calcular.</p>
   </div>
 </div>
 </div>
 
 <script>
-// ── PRICING DATA ──────────────────────────────────────────────────────────────
-const P = {"bordada_ad":[{"label":"Pequena","range":"<600mm²","example":"15x40mm","min":0,"max":600,"prices":{"1000":0.5869,"1500":0.5772,"2000":0.5438,"3000":0.4053,"6000":0.1691,"10000":0.1369,"20000":0.1353},"n":66},{"label":"Média P","range":"600–1200mm²","example":"15x65mm","min":600,"max":1200,"prices":{"1000":0.6359,"1500":0.575,"2000":0.535,"3000":0.4226,"6000":0.218,"10000":0.1848,"20000":0.1579},"n":463},{"label":"Média G","range":"1200–2000mm²","example":"24x65mm","min":1200,"max":2000,"prices":{"1000":0.6418,"1500":0.6068,"2000":0.5803,"3000":0.4366,"6000":0.3128,"10000":0.2927,"20000":0.2248},"n":335},{"label":"Grande","range":"2000–3500mm²","example":"30x80mm","min":2000,"max":3500,"prices":{"1000":0.6597,"1500":0.6432,"2000":0.6331,"3000":0.5803,"6000":0.5112,"10000":0.6263},"n":185},{"label":"Extra","range":">3500mm²","example":"40x100mm+","min":3500,"max":99999,"prices":{"1000":1.535,"1500":1.4022,"2000":1.3923,"3000":1.3855,"6000":0.8165,"10000":0.6749,"20000":0.8288},"n":85}],"bordada_dd":[{"label":"Pequena","range":"<1500mm²","example":"25x55mm","min":0,"max":1500,"prices":{},"n":0},{"label":"Média","range":"1500–3500mm²","example":"30x70mm","min":1500,"max":3500,"prices":{"1000":0.7369,"1500":0.6294,"2000":0.5219,"3000":0.3138,"6000":0.3123,"10000":0.2192,"20000":0.1973},"n":39},{"label":"Grande","range":">3500mm²","example":"40x85mm+","min":3500,"max":99999,"prices":{},"n":1}],"bordada_cetim":[{"label":"Pequena","range":"<1500mm²","example":"12x105mm","min":0,"max":1500,"prices":{"1500":0.5139,"2000":0.5139,"3000":0.2702,"6000":0.2089,"10000":0.1754,"20000":0.1435},"n":22},{"label":"Média","range":"1500–4000mm²","example":"24x60mm","min":1500,"max":4000,"prices":{"1500":0.6529,"2000":0.6529,"3000":0.3884,"6000":0.3525},"n":9},{"label":"Grande","range":">4000mm²","example":"40x80mm+","min":4000,"max":99999,"prices":{},"n":0}],"bordada_tafeta":{"prices":{"1000":0.3028,"1500":0.3454,"2000":0.388,"3000":0.3018,"6000":0.2243,"10000":0.1849,"20000":0.1737},"n":112},"bordada_superbatida":{"prices":{"5000":0.1352,"6000":0.1352,"10000":0.2935},"n":5},"nylon_calandrado":{"prices":{"1000":0.1733,"1500":0.1663,"2000":0.1087,"3000":0.1263,"6000":0.1233,"10000":0.128,"20000":0.1702},"n":173},"nylon_resinado":{"prices":{"1000":0.3055,"1500":0.3822,"2000":0.4589,"3000":0.2368,"6000":0.1113,"10000":0.1025,"20000":0.0744},"n":87},"cetim_importado":[{"label":"Pequena","range":"<1500mm²","example":"25x50mm","min":0,"max":1500,"prices":{"500":0.1539,"1000":0.202,"1500":0.1889,"2000":0.1757,"3000":0.1964,"6000":0.2084,"10000":0.2582},"n":120},{"label":"Média","range":"1500–3500mm²","example":"30x80mm","min":1500,"max":3500,"prices":{"500":0.2425,"1000":0.2832,"1500":0.283,"2000":0.2826,"3000":0.2632,"6000":0.226,"10000":0.2349},"n":123},{"label":"Grande","range":">3500mm²","example":"35x100mm+","min":3500,"max":99999,"prices":{"1000":0.5959,"1500":0.5184,"3000":0.3869,"6000":0.4543,"10000":0.3767},"n":9}],"cetim_impresso":{"prices":{"1000":0.3302,"1500":0.4068,"2000":0.4834,"3000":0.3682,"6000":0.2291,"10000":0.2479,"20000":0.2263},"n":107},"sarja":{"prices":{"1000":0.5665,"1500":0.5581,"2000":0.4785,"3000":0.4867,"6000":0.4533,"10000":0.5131,"20000":0.3528},"n":168},"silicone":{"prices":{"500":0.3912,"1000":0.2913,"1500":0.3174,"2000":0.3435,"3000":0.3072,"6000":0.3203,"10000":0.3173},"n":64},"tag_couche":[{"label":"Pequena","range":"<2000mm²","example":"44x44mm","min":0,"max":2000,"prices":{"1000":0.6176,"1500":0.5373,"3000":0.2786,"6000":0.0512},"n":8},{"label":"Média","range":"2000–5000mm²","example":"48x88mm","min":2000,"max":5000,"prices":{"500":0.6025,"1000":0.5351,"1500":0.5139,"2000":0.3745,"3000":0.4669,"6000":0.4165,"10000":0.333,"20000":0.3055},"n":406},{"label":"Grande","range":">5000mm²","example":"55x120mm+","min":5000,"max":99999,"prices":{"6000":0.4796,"10000":0.5797,"20000":0.31},"n":20}],"tag_triplex":{"prices":{"5000":0.4226},"n":5},"opelprint":[{"label":"Mini","range":"<500mm²","example":"15x30mm","min":0,"max":500,"prices":{"250":0.9918,"500":0.7377,"1000":0.5378,"2000":0.408,"3000":0.439,"5000":0.4722,"10000":0.4982},"n":55},{"label":"Pequena","range":"500–1500mm²","example":"25x50mm","min":500,"max":1500,"prices":{"100":2.905,"250":1.6411,"500":1.2433,"1000":1.0621,"2000":0.9272,"3000":0.9941,"5000":1.1297,"10000":0.7801},"n":215},{"label":"Média","range":"1500–3500mm²","example":"40x60mm","min":1500,"max":3500,"prices":{"100":7.1608,"250":3.1032,"500":4.3638,"1000":3.603,"2000":1.986,"3000":2.05,"5000":1.8481},"n":138},{"label":"Grande","range":"3500–7000mm²","example":"65x80mm","min":3500,"max":7000,"prices":{"100":8.734,"250":3.1323,"500":4.0428,"1000":4.1895,"2000":5.4219,"3000":5.4219,"5000":4.2711},"n":141},{"label":"Extra","range":">7000mm²","example":"80x100mm+","min":7000,"max":99999,"prices":{"100":11.45,"250":6.2526,"500":7.6406,"1000":6.6728,"5000":4.2},"n":35}],"pu_3d":[{"label":"Mini","range":"<300mm²","example":"10x25mm","min":0,"max":300,"prices":{"250":0.4452,"500":0.4693,"1000":0.3726},"n":7},{"label":"Pequena","range":"300–900mm²","example":"15x45mm","min":300,"max":900,"prices":{"250":0.9845,"500":0.9715,"1000":0.6621,"2000":0.4925,"3000":0.5191,"6000":0.5524,"10000":0.3852},"n":411},{"label":"Média","range":"900–2500mm²","example":"30x60mm","min":900,"max":2500,"prices":{"250":1.5844,"500":1.4739,"1000":1.3956,"2000":1.0551,"3000":1.0404,"6000":0.7587,"10000":0.4028},"n":323},{"label":"Grande","range":"2500–5000mm²","example":"50x80mm","min":2500,"max":5000,"prices":{"250":2.9906,"500":2.7165,"1000":3.0445,"2000":2.5613,"3000":2.5377,"6000":2.2048},"n":184},{"label":"Extra","range":">5000mm²","example":"60x120mm+","min":5000,"max":99999,"prices":{"250":5.9005,"500":4.9828,"1000":3.2656,"2000":3.5192,"3000":3.7383,"6000":3.2726,"10000":3.01},"n":109}],"opellaser":{"prices":{"100":7.4255,"250":2.5473,"500":2.1585,"1000":1.8862,"2000":2.7139,"5000":0.6658},"n":173},"transfer_dtf":{"prices":{"250":1.268,"500":0.7119,"1000":0.8775,"2000":1.2562,"3000":1.0732,"5000":0.8971},"n":34},"metal_zamak":[{"label":"Mini","range":"<250mm²","example":"10x20mm","min":0,"max":250,"prices":{"1000":2.1949,"2000":3.006,"5000":2.6047},"n":28},{"label":"Pequena","range":"250–600mm²","example":"15x40mm","min":250,"max":600,"prices":{"250":4.4312,"500":2.5905,"1000":3.7083,"2000":2.7707,"5000":2.0638},"n":67},{"label":"Média","range":"600–1500mm²","example":"20x50mm","min":600,"max":1500,"prices":{"250":1.72,"500":1.25,"1000":3.8386,"2000":4.5868,"5000":4.3531},"n":15},{"label":"Grande","range":">1500mm²","example":"43x50mm+","min":1500,"max":99999,"prices":{"1000":14.6127},"n":3}]};
+// ── Load rules from external file ────────────────────────────────────────────
+function waitForRules(cb, attempts=0) {
+  if (window.OPEL_RULES) { cb(window.OPEL_RULES); return; }
+  if (attempts > 20) { document.getElementById('header-info').textContent = 'Erro ao carregar regras'; return; }
+  setTimeout(() => waitForRules(cb, attempts+1), 100);
+}
 
-// ── DIMENSION GUARDRAILS (from real quote data) ───────────────────────────────
-// Each entry: wMin, wMax, hMin, hMax, wCommon, hCommon, commonSizes[], hardMax
-const DIMS = {
-  bordada_ad:         { wMin:10, wMax:100, hMin:22, hMax:390,  wQ:[15,32],  hQ:[45,75],  hard:false, sizes:['10x50','15x43','15x65','20x60','20x75','24x65','25x60','30x60','30x70','35x65','40x85'] },
-  bordada_ad_premium: { wMin:10, wMax:100, hMin:15, hMax:390,  wQ:[10,45],  hQ:[45,105], hard:false, sizes:['10x45','20x70','24x105','25x40','30x60','30x80','45x85'] },
-  bordada_dd:         { wMin:25, wMax:40,  hMin:60, hMax:90,   wQ:[28,40],  hQ:[70,85],  hard:true,  sizes:['25x65','28x80','30x60','30x70','30x90','33x75','40x85'] },
-  bordada_cetim:      { wMin:12, wMax:40,  hMin:50, hMax:105,  wQ:[13,40],  hQ:[60,80],  hard:true,  sizes:['12x105','13x50','24x60','40x75','40x80'] },
-  bordada_tafeta:     { wMin:10, wMax:30,  hMin:40, hMax:270,  wQ:[10,15],  hQ:[40,80],  hard:false, sizes:['10x40','10x270','12x55','16x80','30x50'] },
-  bordada_superbatida:{ wMin:17, wMax:50,  hMin:26, hMax:84,   wQ:[20,40],  hQ:[35,62],  hard:true,  sizes:['17x26','20x35','27x47','28x40','40x62','50x84'] },
-  nylon_calandrado:   { wMin:20, wMax:35,  hMin:38, hMax:130,  wQ:[25,30],  hQ:[43,50],  hard:false, sizes:['25x40','25x43','30x43','30x45','30x50','35x50'] },
-  nylon_resinado:     { wMin:10, wMax:35,  hMin:25, hMax:75,   wQ:[25,30],  hQ:[43,60],  hard:false, sizes:['15x43','25x50','30x43','30x50','35x60'] },
-  cetim_importado:    { wMin:15, wMax:40,  hMin:50, hMax:100,  wQ:[25,35],  hQ:[60,75],  hard:false, sizes:['15x50','25x50','25x75','30x60','30x80','35x100','40x75'] },
-  cetim_impresso:     { wMin:10, wMax:50,  hMin:40, hMax:160,  wQ:[25,35],  hQ:[60,100], hard:false, sizes:['15x50','20x60','30x43','30x75','35x50','35x75','40x50'] },
-  sarja:              { wMin:15, wMax:40,  hMin:43, hMax:100,  wQ:[15,30],  hQ:[43,75],  hard:false, sizes:['15x43','15x60','15x75','20x50','20x75','30x60','35x60'] },
-  silicone:           { wMin:10, wMax:50,  hMin:35, hMax:70,   wQ:[25,35],  hQ:[45,60],  hard:false, sizes:['20x50','25x45','25x60','30x50','30x70','35x54'] },
-  tag_couche:         { wMin:44, wMax:125, hMin:44, hMax:88,   wQ:[48,48],  hQ:[88,88],  hard:false, sizes:['44x48','48x44','48x48','48x88'] },
-  tag_triplex:        { wMin:35, wMax:60,  hMin:75, hMax:130,  wQ:[55,55],  hQ:[75,75],  hard:false, sizes:['50x100','55x75','50x120'] },
-  opelprint:          { wMin:7,  wMax:83,  hMin:15, hMax:350,  wQ:[20,55],  hQ:[40,83],  hard:false, sizes:['15x30','20x40','25x50','30x50','40x60','50x60','60x60','65x65','80x80'] },
-  pu_3d:              { wMin:10, wMax:81,  hMin:19, hMax:170,  wQ:[15,60],  hQ:[35,65],  hard:false, sizes:['10x35','15x43','15x45','20x30','25x50','40x50','50x85','60x60','60x120'] },
-  opellaser:          { wMin:8,  wMax:44,  hMin:20, hMax:80,   wQ:[10,20],  hQ:[30,45],  hard:false, sizes:['10x20','10x30','15x40','20x50','32x38','44x80'] },
-  transfer_dtf:       { wMin:16, wMax:49,  hMin:27, hMax:70,   wQ:[27,42],  hQ:[44,67],  hard:false, sizes:['25x60','27x30','36x54','37x56','39x44','42x50'] },
-  metal_zamak:        { wMin:10, wMax:43,  hMin:12, hMax:50,   wQ:[12,20],  hQ:[25,45],  hard:true,  sizes:['10x20','10x45','15x40','18x18','20x25','20x50','43x50'] },
-};
+let P = {}, DIMS = {}, SURCHARGES = {}, META = {};
+
+waitForRules(rules => {
+  P = rules.PRICING;
+  DIMS = rules.DIMS;
+  SURCHARGES = rules.SURCHARGES;
+  META = rules.META;
+
+  // Update UI with meta info
+  document.getElementById('header-info').textContent =
+    `${META.total_price_points?.toLocaleString('pt-BR')} pts · ${META.updated} · ${META.version}`;
+  document.getElementById('dsrc-label').textContent =
+    `${META.total_quotes} orçamentos · Base ${META.base_year}`;
+
+  // Update surcharge labels from rules
+  Object.entries(SURCHARGES).forEach(([id, s]) => {
+    const lbl = document.getElementById('lbl-'+id);
+    if (lbl && s.mult > 1) lbl.textContent = '+' + Math.round((s.mult-1)*100) + '%';
+  });
+});
 
 const NAMES = {
-  bordada_ad:'Bordada Alta Definição (AD)', bordada_ad_premium:'Bordada AD Premium',
-  bordada_dd:'Bordada Dupla Densidade (DD)', bordada_cetim:'Bordada em Cetim',
-  bordada_tafeta:'Bordada Tafetá', bordada_superbatida:'Bordada Superbatida',
-  nylon_calandrado:'Nylon Calandrado', nylon_resinado:'Nylon Resinado',
-  cetim_importado:'Cetim Importado', cetim_impresso:'Cetim Impresso / Fita',
-  sarja:'Sarja Algodão', silicone:'Silicone (Leitoso/Translúcido)',
-  tag_couche:'Tag Papel Couchê 300g', tag_triplex:'Tag Papel Triplex 330g',
-  opelprint:'Opelprint (PU/Digital)', pu_3d:'3D PU (Couro)',
-  opellaser:'Opellaser (ABS/Metal)', transfer_dtf:'Transfer Digital DTF',
-  metal_zamak:'Metal Zamak'
+  bordada_ad:'Bordada Alta Definição (AD)', bordada_dd:'Bordada Dupla Densidade (DD)',
+  bordada_cetim:'Bordada em Cetim', bordada_tafeta:'Bordada Tafetá',
+  bordada_superbatida:'Bordada Superbatida', nylon_calandrado:'Nylon Calandrado',
+  nylon_resinado:'Nylon Resinado', cetim_importado:'Cetim Importado',
+  cetim_impresso:'Cetim Impresso / Fita', sarja:'Sarja Algodão',
+  silicone:'Silicone (Leitoso/Translúcido)', tag_couche:'Tag Papel Couchê 300g',
+  tag_triplex:'Tag Papel Triplex 330g', opelprint:'Opelprint (PU/Digital)',
+  pu_3d:'3D PU (Couro)', opellaser:'Opellaser (ABS/Metal)',
+  transfer_dtf:'Transfer Digital DTF', metal_zamak:'Metal Zamak'
 };
 
-const SURCHARGES = [
-  {id:'a-tc',label:'Termocolante',mult:1.10},{id:'a-ce',label:'Corte especial',mult:1.70},
-  {id:'a-mc',label:'Meio corte',mult:1.05},{id:'a-cp',label:'Corte pirógrafo',mult:1.08},
-  {id:'a-vr',label:'Verniz / UV',mult:1.08},{id:'a-hs',label:'Hot Stamping',mult:1.15},
-  {id:'a-lm',label:'Laminado/Prolan',mult:1.08},{id:'a-fu',label:'Furo 3mm',mult:1.03},
-  {id:'a-rl',label:'Relevo',mult:1.0},{id:'a-df',label:'Dupla face',mult:1.12},
-];
-
-const TAG_ONLY  = ['tag_couche','tag_triplex'];
 const FLAT_FOLD = ['nylon_calandrado','nylon_resinado','sarja','cetim_impresso','silicone','transfer_dtf','opellaser','metal_zamak','tag_couche','tag_triplex'];
+const TAG_ONLY  = ['tag_couche','tag_triplex'];
 const TECH_ONLY = ['opelprint','pu_3d','opellaser','transfer_dtf','metal_zamak'];
 
-// ── EVENT HANDLERS ────────────────────────────────────────────────────────────
+let dimValid = true;
+
 function onPtChange() {
   const pt = document.getElementById('pt').value;
-
-  // Show product dimension reference
+  const d = DIMS[pt];
   const refBox = document.getElementById('dim-ref-box');
-  if (pt && DIMS[pt]) {
-    const d = DIMS[pt];
+  if (pt && d) {
     document.getElementById('dim-ref-range').textContent =
       `Largura: ${d.wMin}–${d.wMax}mm  ·  Altura: ${d.hMin}–${d.hMax}mm`;
     document.getElementById('dim-ref-examples').textContent =
       `Mais comum: ${d.wQ[0]}–${d.wQ[1]}mm × ${d.hQ[0]}–${d.hQ[1]}mm`;
     refBox.style.display = 'block';
-
-    // Common sizes chips
     const wrap = document.getElementById('common-sizes-wrap');
-    const cont = document.getElementById('common-sizes');
-    cont.innerHTML = d.sizes.map(s =>
-      `<div class="size-chip" onclick="fillSize('${s}')">${s}</div>`
-    ).join('');
+    document.getElementById('common-sizes').innerHTML =
+      d.sizes.map(s => `<div class="size-chip" onclick="fillSize('${s}')">${s}</div>`).join('');
     wrap.style.display = 'block';
   } else {
     refBox.style.display = 'none';
     document.getElementById('common-sizes-wrap').style.display = 'none';
   }
-
-  // Toggle spec fields
-  const isTag  = TAG_ONLY.includes(pt);
-  const isTech = TECH_ONLY.includes(pt);
-  document.getElementById('fold-grp').style.display   = FLAT_FOLD.includes(pt) ? 'none' : 'block';
-  document.getElementById('colors-grp').style.display = (pt==='opelprint'||pt==='pu_3d'||pt==='metal_zamak') ? 'none' : 'flex';
-  ['w-ver','w-hot','w-lam','w-fur'].forEach(id => document.getElementById(id).style.display = (isTag||isTech)?'flex':'none');
-  document.getElementById('w-rel').style.display = isTech ? 'flex' : 'none';
-  document.getElementById('w-df').style.display  = (pt==='opellaser'||pt==='opelprint') ? 'flex' : 'none';
-
-  // Re-run validation if dims already filled
+  document.getElementById('fold-grp').style.display = FLAT_FOLD.includes(pt) ? 'none' : 'block';
+  document.getElementById('colors-grp').style.display = ['opelprint','pu_3d','metal_zamak'].includes(pt) ? 'none' : 'flex';
+  ['w-ver','w-hot','w-lam','w-fur'].forEach(id => {
+    document.getElementById(id).style.display = (TAG_ONLY.includes(pt)||TECH_ONLY.includes(pt)) ? 'flex' : 'none';
+  });
+  document.getElementById('w-rel').style.display = TECH_ONLY.includes(pt) ? 'flex' : 'none';
+  document.getElementById('w-df').style.display = ['opellaser','opelprint'].includes(pt) ? 'flex' : 'none';
   onDimChange();
 }
 
-function fillSize(sizeStr) {
-  const [w, h] = sizeStr.split('x');
+function fillSize(s) {
+  const [w,h] = s.split('x');
   document.getElementById('w').value = w;
   document.getElementById('h').value = h;
   onDimChange();
 }
 
-// Validation state — track if we should block calc
-let dimValid = true;
-
 function onDimChange() {
   const pt = document.getElementById('pt').value;
-  const w  = parseFloat(document.getElementById('w').value);
-  const h  = parseFloat(document.getElementById('h').value);
+  const w = parseFloat(document.getElementById('w').value);
+  const h = parseFloat(document.getElementById('h').value);
   const wEl = document.getElementById('w');
   const hEl = document.getElementById('h');
   const alertEl = document.getElementById('dim-alert');
-  const areaDisp = document.getElementById('area-disp');
-
-  // Clear states
   wEl.className = ''; hEl.className = '';
   alertEl.style.display = 'none'; alertEl.innerHTML = '';
-  areaDisp.style.display = 'none';
+  document.getElementById('area-disp').style.display = 'none';
 
   if (!w && !h) { dimValid = true; updateBtn(); return; }
   if (!pt || !DIMS[pt]) {
-    if (w > 0 && h > 0) showAreaOnly(w, h);
+    if (w > 0 && h > 0) showArea(w, h);
     dimValid = true; updateBtn(); return;
   }
 
   const d = DIMS[pt];
-  const msgs = [];
-  let level = 'ok'; // ok | warn | err
-
+  const msgs = []; let level = 'ok';
   if (w > 0 && h > 0) {
-    // Hard limits: block completely
     if (d.hard) {
-      if (w < d.wMin || w > d.wMax || h < d.hMin || h > d.hMax) {
-        level = 'err';
-        if (w < d.wMin || w > d.wMax)
-          msgs.push(`Largura fora do intervalo para este produto (${d.wMin}–${d.wMax}mm).`);
-        if (h < d.hMin || h > d.hMax)
-          msgs.push(`Altura fora do intervalo para este produto (${d.hMin}–${d.hMax}mm).`);
-      }
+      if (w < d.wMin || w > d.wMax) { level='err'; msgs.push(`Largura fora do intervalo (${d.wMin}–${d.wMax}mm).`); }
+      if (h < d.hMin || h > d.hMax) { level='err'; msgs.push(`Altura fora do intervalo (${d.hMin}–${d.hMax}mm).`); }
     } else {
-      // Soft limits: warn but allow
-      if (w < d.wMin || w > d.wMax) {
-        level = 'warn';
-        msgs.push(`Largura ${w}mm fora do range habitual (${d.wMin}–${d.wMax}mm). Estimativa menos precisa.`);
-      }
-      if (h < d.hMin || h > d.hMax) {
-        level = level==='err'?'err':'warn';
-        msgs.push(`Altura ${h}mm fora do range habitual (${d.hMin}–${d.hMax}mm). Estimativa menos precisa.`);
-      }
+      if (w < d.wMin || w > d.wMax) { level='warn'; msgs.push(`Largura ${w}mm fora do range habitual (${d.wMin}–${d.wMax}mm). Estimativa menos precisa.`); }
+      if (h < d.hMin || h > d.hMax) { if(level!=='err') level='warn'; msgs.push(`Altura ${h}mm fora do range habitual (${d.hMin}–${d.hMax}mm). Estimativa menos precisa.`); }
     }
-
-    // Extra: warn if dimension seems swapped (typical w < h for labels)
     const swapTypes = ['bordada_ad','bordada_cetim','bordada_dd','nylon_calandrado','cetim_impresso','sarja','cetim_importado'];
     if (swapTypes.includes(pt) && w > h && level === 'ok') {
       level = 'warn';
-      msgs.push(`Largura (${w}mm) maior que Altura (${h}mm) — verifique se as dimensões estão corretas. O padrão para este produto é largura < altura.`);
+      msgs.push(`Largura (${w}mm) > Altura (${h}mm). Verifique se as dimensões estão corretas.`);
     }
-
-    // Color inputs
-    if (level === 'err') {
-      wEl.className = 'inp-err'; hEl.className = 'inp-err';
-    } else if (level === 'warn') {
-      if (w < d.wMin || w > d.wMax) wEl.className = 'inp-warn';
-      if (h < d.hMin || h > d.hMax) hEl.className = 'inp-warn';
-    } else {
-      wEl.className = 'inp-ok'; hEl.className = 'inp-ok';
-    }
-
-    // Show alert
+    if (level==='err') { wEl.className='inp-err'; hEl.className='inp-err'; }
+    else if (level==='warn') {
+      if (w < d.wMin || w > d.wMax) wEl.className='inp-warn';
+      if (h < d.hMin || h > d.hMax) hEl.className='inp-warn';
+    } else { wEl.className='inp-ok'; hEl.className='inp-ok'; }
     if (msgs.length) {
-      const icon = level==='err' ? '✕' : '⚠';
-      alertEl.innerHTML = `<div class="val-alert ${level}"><span class="val-icon">${icon}</span><div>${msgs.join('<br>')}</div></div>`;
+      alertEl.innerHTML = `<div class="val-alert ${level}"><span class="val-icon">${level==='err'?'✕':'⚠'}</span><div>${msgs.join('<br>')}</div></div>`;
       alertEl.style.display = 'block';
     }
-
-    // Area display
-    showAreaOnly(w, h);
+    showArea(w, h);
     dimValid = level !== 'err';
   }
-
   updateBtn();
 }
 
-function showAreaOnly(w, h) {
-  if (w > 0 && h > 0) {
-    const area = w * h;
+function showArea(w, h) {
+  if (w>0 && h>0) {
+    const area = w*h;
     document.getElementById('area-val').textContent = area.toFixed(0);
     const pt = document.getElementById('pt').value;
     const b = getBracket(pt, area);
@@ -446,35 +379,32 @@ function showAreaOnly(w, h) {
   }
 }
 
-function updateBtn() {
-  document.getElementById('btn-calc').disabled = !dimValid;
-}
+function updateBtn() { document.getElementById('btn-calc').disabled = !dimValid; }
 
-// ── PRICING LOGIC ─────────────────────────────────────────────────────────────
 function getBracket(pt, area) {
   const data = P[pt];
   if (!data || !Array.isArray(data)) return null;
   return data.find(b => area > b.min && area <= b.max) || data[data.length-1];
 }
 
-function interp(priceTable, qty) {
-  const keys = Object.keys(priceTable).map(Number).sort((a,b)=>a-b);
+function interp(pt_table, qty) {
+  const keys = Object.keys(pt_table).map(Number).sort((a,b)=>a-b);
   if (!keys.length) return null;
-  if (qty <= keys[0]) return priceTable[keys[0]];
-  if (qty >= keys[keys.length-1]) return priceTable[keys[keys.length-1]];
-  for (let i = 0; i < keys.length-1; i++) {
+  if (qty <= keys[0]) return pt_table[keys[0]];
+  if (qty >= keys[keys.length-1]) return pt_table[keys[keys.length-1]];
+  for (let i=0; i<keys.length-1; i++) {
     if (qty >= keys[i] && qty <= keys[i+1]) {
       const t = (Math.log(qty)-Math.log(keys[i])) / (Math.log(keys[i+1])-Math.log(keys[i]));
-      return priceTable[keys[i]] + t*(priceTable[keys[i+1]]-priceTable[keys[i]]);
+      return pt_table[keys[i]] + t*(pt_table[keys[i+1]]-pt_table[keys[i]]);
     }
   }
   return null;
 }
 
 function getQtyBreaks(pt) {
-  if (['opelprint','pu_3d'].includes(pt))    return [100,250,500,1000,2000,3000,5000,10000];
-  if (['opellaser','metal_zamak'].includes(pt)) return [100,250,500,1000,2000,5000];
-  if (['transfer_dtf'].includes(pt))         return [250,500,1000,2000,3000,5000];
+  if (['opelprint','pu_3d'].includes(pt))       return [100,250,500,1000,2000,3000,5000,10000];
+  if (['opellaser','metal_zamak'].includes(pt))  return [100,250,500,1000,2000,5000];
+  if (['transfer_dtf'].includes(pt))             return [250,500,1000,2000,3000,5000];
   if (['tag_couche','tag_triplex','cetim_importado'].includes(pt)) return [500,1000,1500,2000,3000,6000,10000,20000];
   if (['bordada_dd','bordada_superbatida'].includes(pt)) return [3000,5000,6000,10000,20000];
   return [1000,1500,2000,3000,6000,10000,20000];
@@ -485,8 +415,7 @@ function conf(n) {
   if (n >= 15) return {cls:'c-mid', txt:'Confiança média'};
   return {cls:'c-low', txt:'Dados limitados'};
 }
-
-function fmt(n)    { return n.toFixed(4).replace('.',','); }
+function fmt(n) { return n.toFixed(4).replace('.',','); }
 function fmtBRL(n) { return n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
 
 function calc() {
@@ -496,31 +425,29 @@ function calc() {
   const h = parseFloat(document.getElementById('h').value);
   if (!w||!h||w<=0||h<=0) { showErr('Informe largura e altura.'); return; }
   if (!dimValid) { showErr('Corrija as dimensões antes de calcular.'); return; }
-  const area = w * h;
+  const area = w*h;
   const colors = parseInt(document.getElementById('colors').value)||1;
   const fold = document.getElementById('fold').value;
-
   const data = P[pt];
-  if (!data) { showErr('Produto sem dados.'); return; }
+  if (!data) { showErr('Produto sem dados. Verifique as regras.'); return; }
 
   let priceTable, sampleN, bracketInfo;
   if (Array.isArray(data)) {
     const b = getBracket(pt, area);
     if (!b || !Object.keys(b.prices).length) {
-      showErr(`Sem dados para área ${area.toFixed(0)}mm² neste produto. Tente outra dimensão ou consulte a equipe.`);
+      showErr(`Sem dados para área ${area.toFixed(0)}mm² neste produto. Consulte a equipe.`);
       return;
     }
     priceTable = b.prices; sampleN = b.n; bracketInfo = b;
   } else {
-    if (!Object.keys(data.prices).length) { showErr('Dados insuficientes para este produto.'); return; }
+    if (!Object.keys(data.prices).length) { showErr('Dados insuficientes.'); return; }
     priceTable = data.prices; sampleN = data.n; bracketInfo = null;
   }
 
-  // Surcharges
   let mult = 1.0;
   const active = [];
-  for (const s of SURCHARGES) {
-    const el = document.getElementById(s.id);
+  for (const [id, s] of Object.entries(SURCHARGES)) {
+    const el = document.getElementById(id);
     if (el && el.offsetParent !== null && el.checked && s.mult > 1) {
       mult *= s.mult; active.push(s);
     }
@@ -528,39 +455,40 @@ function calc() {
   if (colors > 1) {
     const cm = 1 + (colors-1)*0.08;
     mult *= cm;
-    active.push({label:`+${colors-1} cor(es)`, mult:cm});
+    active.push({label:`+${colors-1} cor(es)`, mult: cm});
   }
 
   const breaks = getQtyBreaks(pt);
   const rows = breaks.map(qty => {
     const bp = interp(priceTable, qty);
-    if (bp === null) return null;
-    const up = bp * mult;
+    if (bp===null) return null;
+    const up = bp*mult;
     return {qty, up: Math.round(up*10000)/10000, tot: Math.round(qty*up*100)/100};
   }).filter(Boolean);
 
   if (!rows.length) { showErr('Não foi possível calcular preços.'); return; }
 
-  // Check if dimensions were outside normal range (warn in result too)
-  const d = DIMS[pt];
-  let dimWarnResult = '';
-  if (d && (w < d.wMin || w > d.wMax || h < d.hMin || h > d.hMax)) {
-    dimWarnResult = `<div class="val-alert warn" style="margin-bottom:16px"><span class="val-icon">⚠</span><div>Dimensões fora do range mais comum para este produto — preço é uma estimativa por extrapolação.</div></div>`;
-  }
-
   const c = conf(sampleN);
-  const specW = FLAT_FOLD.includes(pt) ? '—' : (fold==='none'?'Sem dobra':fold==='lateral'?'Lateral':fold==='central'?'Central':'Central+Lateral');
+  const specW = FLAT_FOLD.includes(pt) ? '—' : fold==='none'?'Sem dobra':fold==='lateral'?'Lateral':fold==='central'?'Central':'Central+Lateral';
+  const d = DIMS[pt];
+  const outsideRange = d && (w < d.wMin || w > d.wMax || h < d.hMin || h > d.hMax);
+  const hasNote = bracketInfo && bracketInfo.note;
 
   document.getElementById('rp').innerHTML = `
     <div class="res-head">
       <div>
-        <div class="res-title">${NAMES[pt]}</div>
+        <div class="res-title">${NAMES[pt]||pt}</div>
         <div class="res-sub">${w}×${h}mm · ${area.toFixed(0)}mm²${bracketInfo?' · '+bracketInfo.range:''}</div>
       </div>
       <div class="conf ${c.cls}">${c.txt}</div>
     </div>
 
-    ${dimWarnResult}
+    <div class="price-type-badge">
+      ◈ Preço de tabela · condições especiais a negociar com o consultor
+    </div>
+
+    ${outsideRange ? `<div class="val-alert warn" style="margin-bottom:14px"><span class="val-icon">⚠</span><div>Dimensões fora do range mais comum — estimativa por extrapolação.</div></div>` : ''}
+    ${hasNote ? `<div class="val-alert ok" style="margin-bottom:14px"><span class="val-icon">ℹ</span><div>${bracketInfo.note}</div></div>` : ''}
 
     <div class="tbl-wrap">
       <table>
@@ -587,17 +515,12 @@ function calc() {
 
     ${active.length?`<div class="chips">${active.map(s=>`<div class="chip">${s.label} ×${s.mult.toFixed(2)}</div>`).join('')}</div>`:''}
 
-    <div class="note">
-      <p>
-        <strong>Base:</strong> ${sampleN} orçamentos reais · ${NAMES[pt]}<br>
-        <strong>Destaque:</strong> A linha em destaque (fundo escuro) é a quantidade de referência mais comum para este produto.<br>
-        <strong>Variação:</strong> ±10% nas quantidades. Preços são estimativas — variações por design, material e condições comerciais podem ocorrer.
-      </p>
-    </div>
-    <div class="disc">
-      Orçamento válido por 15 dias · Prazo de produção a confirmar · Frete por conta do cliente ·
-      Pequenas variações de cor entre lotes podem ocorrer.
-    </div>
+    <div class="note"><p>
+      <strong>Base:</strong> ${sampleN} orçamentos reais · ${NAMES[pt]||pt}<br>
+      <strong>Destaque:</strong> A linha em destaque (fundo escuro) é a quantidade de referência mais comum.<br>
+      <strong>Variação:</strong> ±10% nas quantidades. Preços são estimativas — variações por design, material e condições comerciais podem ocorrer.
+    </p></div>
+    <div class="disc">Orçamento válido por 15 dias · Prazo de produção a confirmar · Frete por conta do cliente · Pequenas variações de cor entre lotes podem ocorrer.</div>
   `;
 }
 
@@ -605,18 +528,15 @@ function showErr(msg) {
   document.getElementById('rp').innerHTML = `<div class="err-box">⚠ ${msg}</div>`;
 }
 
-function reset() {
-  ['pt','colors','fold'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = id==='fold'?'none':id==='colors'?'1':'';
-  });
+function resetForm() {
+  ['pt','colors','fold'].forEach(id => { const el=document.getElementById(id); if(el) el.value=id==='fold'?'none':id==='colors'?'1':''; });
   ['w','h'].forEach(id => { const el=document.getElementById(id); if(el){el.value='';el.className='';} });
-  SURCHARGES.forEach(s => { const el=document.getElementById(s.id); if(el) el.checked=false; });
+  Object.keys(SURCHARGES).forEach(id => { const el=document.getElementById(id); if(el) el.checked=false; });
   ['area-disp','dim-ref-box','common-sizes-wrap','dim-alert'].forEach(id => document.getElementById(id).style.display='none');
   ['w-ver','w-hot','w-lam','w-fur','w-rel','w-df'].forEach(id => document.getElementById(id).style.display='none');
   dimValid = true;
   document.getElementById('btn-calc').disabled = false;
-  document.getElementById('rp').innerHTML = `<div class="empty"><div class="empty-icon">◈</div><p>Selecione o produto,<br>informe as dimensões<br>e clique em <strong>Calcular Preço</strong>.</p></div>`;
+  document.getElementById('rp').innerHTML = `<div class="empty"><div class="empty-icon">◈</div><p>Selecione o produto,<br>informe as dimensões<br>e clique em Calcular.</p></div>`;
 }
 </script>
 </body>
