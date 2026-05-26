@@ -3,132 +3,269 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculadora de Preços — Opel Etiquetas 2026</title>
+<title>Calculadora de Preços — Opel Etiquetas</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="/rules.js"></script>
 <style>
-  :root {
-    --ink: #1c1c1a; --paper: #f4f1ea; --cream: #ece8dd; --accent: #c13b18;
-    --accent2: #2a5c45; --muted: #8c8779; --border: #d5d0c5; --card: #ffffff; --hi: #fdf6e3;
-    --warn-bg: #fff8e1; --warn-border: #f59e0b; --warn-text: #78450a;
-    --err-bg: #fef2f2; --err-border: #ef4444; --err-text: #991b1b;
-    --ok-bg: #f0fdf4; --ok-border: #22c55e; --ok-text: #166534;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--paper); color: var(--ink); font-family: 'DM Sans', sans-serif; font-size: 13px; min-height: 100vh; }
+:root {
+  --ink: #1c1c1a; --paper: #f4f1ea; --cream: #ece8dd; --card: #ffffff; --hi: #fdf6e3;
+  --accent: #c13b18; --accent2: #2a5c45; --muted: #8c8779; --border: #d5d0c5;
+  --gold: #b8860b; --gold-light: #d4a843;
+  --warn-bg: #fff8e1; --warn-border: #f59e0b; --warn-text: #78450a;
+  --err-bg: #fef2f2; --err-border: #ef4444; --err-text: #991b1b;
+  --ok-bg: #f0fdf4; --ok-border: #22c55e; --ok-text: #166534;
+  --cost-bg: #f0f4f8; --cost-border: #b8c8d8; --cost-text: #2a4a6a;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--paper); color: var(--ink); font-family: 'DM Sans', sans-serif; font-size: 13px; min-height: 100vh; }
 
-  .header { background: var(--ink); color: var(--paper); padding: 18px 40px; display: flex; align-items: center; gap: 20px; border-bottom: 3px solid var(--accent); }
-  .header-title { font-family: 'DM Serif Display', serif; font-size: 20px; color: #fff; }
-  .header-sub { font-size: 10px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; font-family: 'DM Mono', monospace; }
-  .header-badge { margin-left: auto; background: var(--accent); color: #fff; font-size: 9px; padding: 4px 10px; letter-spacing: 1px; text-transform: uppercase; border-radius: 2px; font-family: 'DM Mono', monospace; }
-  .header-info { font-size: 10px; color: #7a7668; font-family: 'DM Mono', monospace; }
+/* ── HEADER ── */
+.header { background: var(--ink); padding: 16px 40px; display: flex; align-items: center; gap: 20px; border-bottom: 3px solid var(--accent); }
+.header-brand { font-family: 'DM Serif Display', serif; font-size: 20px; color: #fff; }
+.header-sub { font-family: 'DM Mono', monospace; font-size: 9px; color: #555550; letter-spacing: 2px; text-transform: uppercase; }
+.header-info { font-size: 10px; color: #7a7668; font-family: 'DM Mono', monospace; margin-left: auto; }
+.badge { background: var(--accent); color: #fff; font-size: 9px; padding: 4px 10px; letter-spacing: 1px; text-transform: uppercase; border-radius: 2px; font-family: 'DM Mono', monospace; }
 
-  .layout { display: grid; grid-template-columns: 360px 1fr; min-height: calc(100vh - 71px); }
-  .panel-left { background: var(--cream); border-right: 1px solid var(--border); padding: 24px 20px; display: flex; flex-direction: column; gap: 18px; overflow-y: auto; }
-  .panel-right { padding: 24px 32px; overflow-y: auto; }
+/* ── TAB BAR ── */
+.tab-bar {
+  background: #141412;
+  display: flex;
+  align-items: stretch;
+  padding: 0 40px;
+  gap: 2px;
+  border-bottom: 1px solid #2a2a26;
+}
+.tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #666660;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+  position: relative;
+  top: 1px;
+}
+.tab-btn:hover { color: #aaa; }
+.tab-btn.active { color: #fff; border-bottom-color: var(--accent); }
+.tab-btn.active-uv { color: var(--gold-light); border-bottom-color: var(--gold); }
+.tab-icon { font-size: 13px; }
+.tab-badge {
+  background: #2a2a26;
+  color: #888882;
+  font-size: 8px;
+  padding: 1px 6px;
+  border-radius: 10px;
+  letter-spacing: 1px;
+}
+.tab-btn.active .tab-badge { background: var(--accent); color: #fff; }
+.tab-btn.active-uv .tab-badge { background: var(--gold); color: var(--ink); }
 
-  .sec-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; padding-bottom: 5px; border-bottom: 1px solid var(--border); font-family: 'DM Mono', monospace; }
-  .fg { display: flex; flex-direction: column; gap: 4px; }
-  .fg label { font-size: 10px; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase; font-family: 'DM Mono', monospace; }
+/* ── TAB PANELS ── */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
 
-  select, input[type="number"] {
-    background: var(--card); border: 1px solid var(--border); border-radius: 3px;
-    padding: 8px 10px; font-family: 'DM Mono', monospace; font-size: 13px; color: var(--ink);
-    width: 100%; outline: none; transition: border-color 0.15s;
-  }
-  select:focus, input:focus { border-color: var(--accent); }
-  input.inp-warn { border-color: var(--warn-border) !important; background: var(--warn-bg); }
-  input.inp-err  { border-color: var(--err-border)  !important; background: var(--err-bg); }
-  input.inp-ok   { border-color: var(--ok-border)   !important; }
-  select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238c8779' fill='none' stroke-width='1.5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px; cursor: pointer; appearance: none; -webkit-appearance: none; }
+/* ═══════════════════════════════════════════
+   TAB 1 — ETIQUETAS PADRÃO
+═══════════════════════════════════════════ */
+.layout { display: grid; grid-template-columns: 360px 1fr; min-height: calc(100vh - 111px); }
+.panel-left { background: var(--cream); border-right: 1px solid var(--border); padding: 24px 20px; display: flex; flex-direction: column; gap: 18px; overflow-y: auto; }
+.panel-right { padding: 24px 32px; overflow-y: auto; }
 
-  .dim-row { display: grid; grid-template-columns: 1fr 16px 1fr; align-items: center; gap: 6px; }
-  .dim-sep { text-align: center; color: var(--muted); font-size: 14px; }
-  .dim-ref { background: var(--hi); border: 1px solid var(--border); border-radius: 3px; padding: 7px 10px; font-size: 10px; color: var(--muted); line-height: 1.6; margin-bottom: 8px; font-family: 'DM Mono', monospace; }
-  .dim-ref strong { color: var(--ink); }
-  .val-alert { border-radius: 3px; padding: 7px 10px; font-size: 11px; line-height: 1.6; margin-top: 5px; display: flex; gap: 7px; align-items: flex-start; font-family: 'DM Sans', sans-serif; }
-  .val-alert.warn { background: var(--warn-bg); border: 1px solid var(--warn-border); color: var(--warn-text); }
-  .val-alert.err  { background: var(--err-bg);  border: 1px solid var(--err-border);  color: var(--err-text); }
-  .val-alert.ok   { background: var(--ok-bg);   border: 1px solid var(--ok-border);   color: var(--ok-text); }
-  .val-icon { font-size: 13px; flex-shrink: 0; }
-  .area-pill { display: inline-block; background: var(--hi); border: 1px solid var(--border); padding: 3px 9px; border-radius: 20px; font-size: 10px; color: var(--muted); margin-top: 5px; font-family: 'DM Mono', monospace; }
-  .area-pill strong { color: var(--accent2); }
-  .size-chip-label { font-size: 9px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-top: 5px; margin-bottom: 3px; font-family: 'DM Mono', monospace; }
-  .common-sizes { display: flex; flex-wrap: wrap; gap: 4px; }
-  .size-chip { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 2px 8px; font-size: 10px; color: var(--muted); cursor: pointer; transition: all 0.1s; user-select: none; font-family: 'DM Mono', monospace; }
-  .size-chip:hover { border-color: var(--accent); color: var(--accent); }
+.sec-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; padding-bottom: 5px; border-bottom: 1px solid var(--border); font-family: 'DM Mono', monospace; }
+.fg { display: flex; flex-direction: column; gap: 4px; }
+.fg label { font-size: 10px; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase; font-family: 'DM Mono', monospace; }
+select, input[type="number"] {
+  background: var(--card); border: 1px solid var(--border); border-radius: 3px;
+  padding: 8px 10px; font-family: 'DM Mono', monospace; font-size: 13px; color: var(--ink);
+  width: 100%; outline: none; transition: border-color 0.15s;
+}
+select:focus, input:focus { border-color: var(--accent); }
+input.inp-warn { border-color: var(--warn-border) !important; background: var(--warn-bg); }
+input.inp-err  { border-color: var(--err-border)  !important; background: var(--err-bg); }
+input.inp-ok   { border-color: var(--ok-border)   !important; }
+select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238c8779' fill='none' stroke-width='1.5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px; cursor: pointer; appearance: none; -webkit-appearance: none; }
 
-  .cb-group { display: flex; flex-direction: column; gap: 6px; }
-  .cb { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 3px 0; }
-  .cb input[type="checkbox"] { width: 13px; height: 13px; accent-color: var(--accent); cursor: pointer; flex-shrink: 0; }
-  .cb .cbl { font-size: 12px; }
-  .cb .cbn { font-size: 10px; color: var(--muted); margin-left: auto; font-family: 'DM Mono', monospace; }
+.dim-row { display: grid; grid-template-columns: 1fr 16px 1fr; align-items: center; gap: 6px; }
+.dim-sep { text-align: center; color: var(--muted); font-size: 14px; }
+.dim-ref { background: var(--hi); border: 1px solid var(--border); border-radius: 3px; padding: 7px 10px; font-size: 10px; color: var(--muted); line-height: 1.6; margin-bottom: 8px; font-family: 'DM Mono', monospace; }
+.dim-ref strong { color: var(--ink); }
+.val-alert { border-radius: 3px; padding: 7px 10px; font-size: 11px; line-height: 1.6; margin-top: 5px; display: flex; gap: 7px; align-items: flex-start; }
+.val-alert.warn { background: var(--warn-bg); border: 1px solid var(--warn-border); color: var(--warn-text); }
+.val-alert.err  { background: var(--err-bg);  border: 1px solid var(--err-border);  color: var(--err-text); }
+.val-alert.ok   { background: var(--ok-bg);   border: 1px solid var(--ok-border);   color: var(--ok-text); }
+.val-icon { font-size: 13px; flex-shrink: 0; }
+.area-pill { display: inline-block; background: var(--hi); border: 1px solid var(--border); padding: 3px 9px; border-radius: 20px; font-size: 10px; color: var(--muted); margin-top: 5px; font-family: 'DM Mono', monospace; }
+.area-pill strong { color: var(--accent2); }
+.size-chip-label { font-size: 9px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-top: 5px; margin-bottom: 3px; font-family: 'DM Mono', monospace; }
+.common-sizes { display: flex; flex-wrap: wrap; gap: 4px; }
+.size-chip { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 2px 8px; font-size: 10px; color: var(--muted); cursor: pointer; transition: all 0.1s; user-select: none; font-family: 'DM Mono', monospace; }
+.size-chip:hover { border-color: var(--accent); color: var(--accent); }
+.cb-group { display: flex; flex-direction: column; gap: 6px; }
+.cb { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 3px 0; }
+.cb input[type="checkbox"] { width: 13px; height: 13px; accent-color: var(--accent); cursor: pointer; flex-shrink: 0; }
+.cb .cbl { font-size: 12px; }
+.cb .cbn { font-size: 10px; color: var(--muted); margin-left: auto; font-family: 'DM Mono', monospace; }
+.btn-calc { background: var(--accent); color: #fff; border: none; padding: 12px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; border-radius: 3px; width: 100%; transition: background 0.15s; }
+.btn-calc:hover { background: #a03215; }
+.btn-calc:disabled { background: #a09888; cursor: not-allowed; }
+.btn-reset { background: transparent; color: var(--muted); border: 1px solid var(--border); padding: 7px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; border-radius: 3px; width: 100%; }
+.btn-reset:hover { border-color: var(--muted); color: var(--ink); }
+.empty { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80%; gap: 12px; color: var(--muted); text-align: center; }
+.empty-icon { font-size: 36px; opacity: 0.2; }
+.empty p { font-size: 12px; line-height: 2; font-family: 'DM Mono', monospace; }
+.res-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; padding-bottom: 16px; border-bottom: 2px solid var(--ink); margin-bottom: 20px; }
+.res-title { font-family: 'DM Serif Display', serif; font-size: 20px; }
+.res-sub { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-top: 3px; }
+.conf { padding: 3px 8px; border-radius: 2px; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; flex-shrink: 0; margin-top: 2px; font-family: 'DM Mono', monospace; }
+.c-high { background: #e8f5e9; color: #2a5c45; border: 1px solid #c8e6c9; }
+.c-mid  { background: #fff8e1; color: #7a5c00; border: 1px solid #ffe082; }
+.c-low  { background: #fce4ec; color: #b71c1c; border: 1px solid #ef9a9a; }
+.tbl-wrap { border: 1px solid var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 18px; }
+table { width: 100%; border-collapse: collapse; }
+thead th { background: var(--ink); color: var(--paper); padding: 9px 14px; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 400; text-align: left; font-family: 'DM Mono', monospace; }
+thead th:not(:first-child) { text-align: right; }
+tbody td { padding: 11px 14px; border-bottom: 1px solid var(--border); font-size: 13px; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:nth-child(even) td { background: var(--hi); }
+td.t-qty { color: var(--muted); font-size: 12px; font-family: 'DM Mono', monospace; }
+td.t-unit { text-align: right; font-family: 'DM Mono', monospace; }
+td.t-total { text-align: right; font-weight: 600; color: var(--accent2); font-family: 'DM Mono', monospace; }
+tr.t-hl td { background: var(--ink) !important; color: #fff !important; }
+tr.t-hl td.t-total { color: #7dd3a8 !important; }
+tr.t-hl td.t-unit { color: #d4c9a8 !important; }
+.spec-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-bottom: 16px; }
+.spec-item { background: var(--hi); border: 1px solid var(--border); border-radius: 3px; padding: 9px 11px; }
+.sk { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; font-family: 'DM Mono', monospace; }
+.sv { font-size: 13px; font-weight: 500; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.chip { background: #fff3e0; border: 1px solid #ffe0b2; color: #bf360c; padding: 2px 8px; border-radius: 20px; font-size: 10px; font-family: 'DM Mono', monospace; }
+.note { background: var(--hi); border-left: 3px solid var(--accent); padding: 10px 13px; border-radius: 0 3px 3px 0; margin-bottom: 12px; }
+.note p { font-size: 11px; color: var(--muted); line-height: 1.7; }
+.note strong { color: var(--ink); }
+.price-type-badge { display: inline-flex; align-items: center; gap: 6px; background: #fff8e1; border: 1px solid #ffe082; border-radius: 3px; padding: 5px 11px; font-size: 10px; color: #7a5c00; font-family: 'DM Mono', monospace; margin-bottom: 14px; letter-spacing: 0.5px; }
+.disc { font-size: 10px; color: var(--muted); line-height: 1.7; padding-top: 10px; border-top: 1px solid var(--border); font-family: 'DM Mono', monospace; }
+.dsrc { font-size: 10px; color: var(--muted); text-align: right; margin-top: auto; padding-top: 6px; font-family: 'DM Mono', monospace; }
 
-  .btn-calc { background: var(--accent); color: #fff; border: none; padding: 12px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; border-radius: 3px; width: 100%; transition: background 0.15s, transform 0.1s; }
-  .btn-calc:hover { background: #a03215; transform: translateY(-1px); }
-  .btn-calc:disabled { background: #a09888; cursor: not-allowed; transform: none; }
-  .btn-reset { background: transparent; color: var(--muted); border: 1px solid var(--border); padding: 7px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; border-radius: 3px; width: 100%; transition: all 0.15s; }
-  .btn-reset:hover { border-color: var(--muted); color: var(--ink); }
+/* ═══════════════════════════════════════════
+   TAB 2 — UV / 3D PU  (scoped with .uv- prefix)
+═══════════════════════════════════════════ */
+.uv-layout { display: grid; grid-template-columns: 400px 1fr; min-height: calc(100vh - 111px); }
+.uv-left { background: var(--cream); border-right: 1px solid var(--border); padding: 24px 22px; display: flex; flex-direction: column; gap: 18px; overflow-y: auto; }
+.uv-right { background: var(--paper); padding: 24px 32px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; }
 
-  .empty { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80%; gap: 12px; color: var(--muted); text-align: center; }
-  .empty-icon { font-size: 36px; opacity: 0.2; }
-  .empty p { font-size: 12px; line-height: 2; font-family: 'DM Mono', monospace; }
+/* Override select/input border focus for UV tab gold */
+#tab-uv select:focus, #tab-uv input:focus { border-color: var(--gold) !important; }
 
-  .res-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; padding-bottom: 16px; border-bottom: 2px solid var(--ink); margin-bottom: 20px; }
-  .res-title { font-family: 'DM Serif Display', serif; font-size: 20px; }
-  .res-sub { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-top: 3px; }
-  .conf { padding: 3px 8px; border-radius: 2px; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; flex-shrink: 0; margin-top: 2px; font-family: 'DM Mono', monospace; }
-  .c-high { background: #e8f5e9; color: #2a5c45; border: 1px solid #c8e6c9; }
-  .c-mid  { background: #fff8e1; color: #7a5c00; border: 1px solid #ffe082; }
-  .c-low  { background: #fce4ec; color: #b71c1c; border: 1px solid #ef9a9a; }
+.uv-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.uv-time-row { display: grid; grid-template-columns: 1fr 14px 1fr; align-items: center; gap: 5px; }
+.uv-time-sep { text-align: center; color: var(--muted); font-size: 11px; font-family: 'DM Mono', monospace; }
 
-  /* Price table */
-  .tbl-wrap { border: 1px solid var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 18px; }
-  table { width: 100%; border-collapse: collapse; }
-  thead th { background: var(--ink); color: var(--paper); padding: 9px 14px; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 400; text-align: left; font-family: 'DM Mono', monospace; }
-  thead th:not(:first-child) { text-align: right; }
-  tbody td { padding: 11px 14px; border-bottom: 1px solid var(--border); font-size: 13px; }
-  tbody tr:last-child td { border-bottom: none; }
-  tbody tr:nth-child(even) td { background: var(--hi); }
-  td.t-qty { color: var(--muted); font-size: 12px; font-family: 'DM Mono', monospace; }
-  td.t-unit { text-align: right; font-family: 'DM Mono', monospace; }
-  td.t-total { text-align: right; font-weight: 600; color: var(--accent2); font-family: 'DM Mono', monospace; }
-  tr.t-hl td { background: var(--ink) !important; color: #fff !important; }
-  tr.t-hl td.t-total { color: #7dd3a8 !important; }
-  tr.t-hl td.t-unit { color: #d4c9a8 !important; }
+.ink-section { background: var(--card); border: 1px solid var(--border); border-radius: 3px; overflow: hidden; }
+.ink-table { width: 100%; border-collapse: collapse; }
+.ink-table th { background: #2a2a26; color: #d4c9a8; padding: 7px 10px; font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 1.5px; text-transform: uppercase; text-align: left; font-weight: 400; }
+.ink-table th:not(:first-child) { text-align: right; }
+.ink-table td { padding: 6px 10px; border-bottom: 1px solid #f0ede6; }
+.ink-table tr:last-child td { border-bottom: none; }
+.ink-table td:not(:first-child) { text-align: right; }
+.ink-swatch { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: middle; border: 1px solid rgba(0,0,0,0.12); }
 
-  .spec-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-bottom: 16px; }
-  .spec-item { background: var(--hi); border: 1px solid var(--border); border-radius: 3px; padding: 9px 11px; }
-  .sk { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; font-family: 'DM Mono', monospace; }
-  .sv { font-size: 13px; font-weight: 500; }
+.cost-breakdown { background: var(--cost-bg); border: 1px solid var(--cost-border); border-radius: 4px; padding: 14px 16px; }
+.cost-title { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--cost-text); margin-bottom: 12px; }
+.cost-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid rgba(0,0,0,0.06); }
+.cost-row:last-child { border-bottom: none; }
+.cost-row-label { font-size: 12px; color: #3a5a7a; }
+.cost-row-val { font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; color: var(--cost-text); }
+.cost-row.total-row { margin-top: 6px; padding-top: 10px; border-top: 2px solid var(--cost-border); border-bottom: none; }
+.cost-row.total-row .cost-row-label { font-weight: 600; font-size: 13px; color: var(--ink); }
+.cost-row.total-row .cost-row-val { font-size: 15px; color: var(--ink); }
+.cost-row.unit-row { background: rgba(255,255,255,0.7); border-radius: 3px; padding: 6px 10px; margin-top: 4px; }
+.cost-row.unit-row .cost-row-label { font-size: 11px; color: var(--muted); }
+.cost-row.unit-row .cost-row-val { font-size: 13px; color: var(--accent2); font-weight: 600; }
 
-  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
-  .chip { background: #fff3e0; border: 1px solid #ffe0b2; color: #bf360c; padding: 2px 8px; border-radius: 20px; font-size: 10px; font-family: 'DM Mono', monospace; }
+.overhead-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.oh-item { background: var(--card); border: 1px solid var(--border); border-radius: 3px; padding: 8px 10px; text-align: center; }
+.oh-pct { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--ink); line-height: 1; }
+.oh-label { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; margin-top: 3px; }
+.oh-total { background: var(--ink); border-radius: 3px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; }
+.oh-total-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #888882; }
+.oh-total-val { font-family: 'DM Serif Display', serif; font-size: 18px; color: #fff; }
 
-  .note { background: var(--hi); border-left: 3px solid var(--accent); padding: 10px 13px; border-radius: 0 3px 3px 0; margin-bottom: 12px; }
-  .note p { font-size: 11px; color: var(--muted); line-height: 1.7; font-family: 'DM Sans', sans-serif; }
-  .note strong { color: var(--ink); }
+.lucro-row { display: flex; gap: 5px; }
+.lucro-preset { flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: 3px; padding: 7px 4px; text-align: center; cursor: pointer; transition: all 0.15s; }
+.lucro-preset:hover { border-color: var(--gold); }
+.lucro-preset.lp-active { background: var(--gold); border-color: var(--gold); }
+.lucro-preset .lp-pct { font-family: 'DM Serif Display', serif; font-size: 15px; color: var(--ink); }
+.lucro-preset .lp-qty { font-family: 'DM Mono', monospace; font-size: 8px; color: var(--muted); margin-top: 2px; }
+.lucro-preset.lp-active .lp-qty { color: rgba(26,26,24,0.7); }
 
-  /* Price type badge */
-  .price-type-badge { display: inline-flex; align-items: center; gap: 6px; background: #fff8e1; border: 1px solid #ffe082; border-radius: 3px; padding: 5px 11px; font-size: 10px; color: #7a5c00; font-family: 'DM Mono', monospace; margin-bottom: 14px; letter-spacing: 0.5px; }
+/* UV Price table */
+.uv-tbl-wrap { border: 1px solid var(--border); border-radius: 3px; overflow: hidden; }
+.uv-price-table { width: 100%; border-collapse: collapse; }
+.uv-price-table thead th { background: var(--ink); color: var(--paper); padding: 9px 14px; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 400; text-align: left; }
+.uv-price-table thead th:not(:first-child) { text-align: right; }
+.uv-price-table tbody td { padding: 11px 14px; border-bottom: 1px solid var(--border); font-size: 13px; }
+.uv-price-table tbody tr:last-child td { border-bottom: none; }
+.uv-price-table tbody tr:nth-child(even) td { background: var(--hi); }
+.col-lucro { text-align: center !important; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--gold); }
+tr.uv-hl td { background: var(--ink) !important; color: #fff !important; }
+tr.uv-hl .col-lucro { color: var(--gold-light) !important; }
+tr.uv-hl td.t-unit { color: #d4c9a8 !important; }
+tr.uv-hl td.t-total { color: #7dd3a8 !important; }
 
-  .disc { font-size: 10px; color: var(--muted); line-height: 1.7; padding-top: 10px; border-top: 1px solid var(--border); font-family: 'DM Mono', monospace; }
-  .err-box { background: #fce4ec; border: 1px solid #ef9a9a; border-radius: 3px; padding: 13px; color: #c62828; font-size: 12px; line-height: 1.6; }
-  .dsrc { font-size: 10px; color: var(--muted); text-align: right; margin-top: auto; padding-top: 6px; font-family: 'DM Mono', monospace; }
+.formula-box { background: #1a1a18; border-radius: 4px; padding: 14px 16px; }
+.formula-title { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #888882; margin-bottom: 10px; }
+.formula-line { font-family: 'DM Mono', monospace; font-size: 11px; color: #e8e4d8; padding: 3px 0; }
+.formula-line span { color: var(--gold-light); }
+.formula-line em { color: #7dd3a8; font-style: normal; }
+
+.uv-btn-calc { background: var(--gold); color: var(--ink); border: none; padding: 12px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; border-radius: 3px; width: 100%; font-weight: 600; transition: background 0.15s; }
+.uv-btn-calc:hover { background: var(--gold-light); }
+.uv-note { background: var(--hi); border-left: 3px solid var(--gold); padding: 10px 13px; border-radius: 0 3px 3px 0; }
+.uv-note p { font-size: 11px; color: var(--muted); line-height: 1.7; }
+.uv-note strong { color: var(--ink); }
 </style>
 </head>
 <body>
+
+<!-- ── HEADER ── -->
 <div class="header">
   <div>
-    <div class="header-title">Calculadora de Preços</div>
-    <div class="header-sub">Opel Etiquetas · 2026</div>
+    <div class="header-brand">Opel Etiquetas</div>
+    <div class="header-sub">Calculadora de Preços · 2026</div>
   </div>
   <div class="header-info" id="header-info">Carregando regras...</div>
-  <div class="header-badge">Uso Interno v2</div>
+  <div class="badge">Uso Interno v2</div>
 </div>
 
+<!-- ── TAB BAR ── -->
+<div class="tab-bar">
+  <button class="tab-btn active" id="tab-btn-std" onclick="switchTab('std')">
+    <span class="tab-icon">◈</span>
+    Etiquetas Padrão
+    <span class="tab-badge" id="tab-badge-std">—</span>
+  </button>
+  <button class="tab-btn" id="tab-btn-uv" onclick="switchTab('uv')">
+    <span class="tab-icon">◉</span>
+    UV · 3D PU
+    <span class="tab-badge" style="background:#2a2a1a;color:var(--gold-light)">CUSTO REAL</span>
+  </button>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     TAB 1 — ETIQUETAS PADRÃO
+════════════════════════════════════════════════ -->
+<div id="tab-std" class="tab-panel active">
 <div class="layout">
 <div class="panel-left">
+
   <div>
     <div class="sec-label">Tipo de Produto</div>
     <div class="fg">
@@ -191,10 +328,8 @@
     <div class="fg" id="colors-grp">
       <label>Número de Cores</label>
       <select id="colors">
-        <option value="1">1 cor</option>
-        <option value="2">2 cores</option>
-        <option value="3">3 cores</option>
-        <option value="4">4+ cores</option>
+        <option value="1">1 cor</option><option value="2">2 cores</option>
+        <option value="3">3 cores</option><option value="4">4+ cores</option>
       </select>
     </div>
     <div class="fg" id="fold-grp" style="margin-top:10px">
@@ -237,37 +372,286 @@
     <p>Selecione o produto,<br>informe as dimensões<br>e clique em Calcular.</p>
   </div>
 </div>
-</div>
+</div><!-- /layout -->
+</div><!-- /tab-std -->
+
+<!-- ════════════════════════════════════════════════
+     TAB 2 — UV · 3D PU
+════════════════════════════════════════════════ -->
+<div id="tab-uv" class="tab-panel">
+<div class="uv-layout">
+
+<!-- UV LEFT -->
+<div class="uv-left">
+
+  <div>
+    <div class="sec-label">Material Base (Substrato PU)</div>
+    <div class="fg" style="margin-bottom:10px">
+      <label>Material</label>
+      <select id="uv-material" onchange="uvOnMaterialChange()">
+        <option value="">— selecione —</option>
+        <optgroup label="── PU Makarim">
+          <option value="makarim_branco" data-cost="39.72">PU Makarim Branco/Black</option>
+          <option value="makarim_gelo" data-cost="39.72">PU Makarim Gelo</option>
+          <option value="makarim_preto" data-cost="39.72">PU Makarim Black</option>
+        </optgroup>
+        <optgroup label="── PU Velour">
+          <option value="velour_bistro" data-cost="28.61">PU Velour Bistrô (0603)</option>
+          <option value="velour_magno" data-cost="28.61">PU Velour Magno (0606)</option>
+          <option value="velour_antique" data-cost="28.61">PU Velour New Antique (0605)</option>
+        </optgroup>
+        <optgroup label="── PU Ipanema">
+          <option value="ipanema_ouro" data-cost="36.81">PU New Ipanema Ouro (0401)</option>
+          <option value="ipanema_bioma" data-cost="36.81">PU Ipanema Bioma (0403)</option>
+        </optgroup>
+        <optgroup label="── PU Hot Stamp / Especiais">
+          <option value="hotstamp_ambar" data-cost="42.50">PU Hot Stamp Âmbar (0301)</option>
+          <option value="diva_linhaca" data-cost="35.00">PU Diva Forro Linhaça (0501)</option>
+          <option value="diva_pera" data-cost="35.00">PU Diva Forro Pera (0504)</option>
+          <option value="diva_glass" data-cost="38.00">PU Diva Glass Prata (0402)</option>
+          <option value="specchio_prata" data-cost="45.00">PU Specchio Prata</option>
+          <option value="eco_ambar" data-cost="32.00">PU Eco Âmbar (1801)</option>
+          <option value="holografico_prata" data-cost="48.00">PU Holográfico Prata</option>
+          <option value="verniz_holografico" data-cost="48.00">PU Verniz Holográfico Preto</option>
+        </optgroup>
+        <optgroup label="── Tecido / Outros">
+          <option value="tecido_impermeavel" data-cost="25.00">Tecido Impermeável UV</option>
+          <option value="personalizado" data-cost="0">Custo manual ↓</option>
+        </optgroup>
+      </select>
+    </div>
+    <div id="uv-custom-mat-wrap" style="display:none">
+      <div class="fg"><label>Custo do blank (R$)</label>
+        <input type="number" id="uv-custom-mat-cost" placeholder="ex: 35.00" step="0.01" min="0" oninput="uvLiveCalc()">
+      </div>
+    </div>
+    <div class="uv-two-col" style="margin-top:10px">
+      <div class="fg"><label>Blanks utilizados</label>
+        <input type="number" id="uv-blanks-qty" value="1" min="1" oninput="uvLiveCalc()">
+      </div>
+      <div class="fg"><label>Peças por blank</label>
+        <input type="number" id="uv-pieces" placeholder="ex: 49" min="1" oninput="uvLiveCalc()">
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="sec-label">Complemento da Base</div>
+    <div class="fg" style="margin-bottom:8px">
+      <label>Tipo</label>
+      <select id="uv-comp-type" onchange="uvOnCompChange()">
+        <option value="none">Sem complemento</option>
+        <option value="termocolante">Termocolante TPU c/ papel</option>
+        <option value="dupla_face_3m">Dupla Face 3M — 467MP</option>
+        <option value="costura">Para costura (sem custo)</option>
+        <option value="personalizado">Custo manual ↓</option>
+      </select>
+    </div>
+    <div id="uv-comp-wrap" style="display:none">
+      <div class="uv-two-col">
+        <div class="fg"><label>Custo blank compl. (R$)</label>
+          <input type="number" id="uv-comp-blank-cost" step="0.01" min="0" oninput="uvLiveCalc()">
+        </div>
+        <div class="fg"><label>Qtd blanks</label>
+          <input type="number" id="uv-comp-blanks" value="1" min="0" oninput="uvLiveCalc()">
+        </div>
+      </div>
+    </div>
+    <div id="uv-comp-fixed-wrap" style="display:none">
+      <div class="fg"><label>Custo por peça (R$)</label>
+        <input type="number" id="uv-comp-per-piece" step="0.01" min="0" oninput="uvLiveCalc()">
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="sec-label">Tinta UV (cc por cor)</div>
+    <div class="ink-section">
+      <table class="ink-table">
+        <thead><tr><th>Cor</th><th>cc</th><th>Custo (R$)</th></tr></thead>
+        <tbody id="uv-ink-tbody"></tbody>
+        <tfoot>
+          <tr style="background:#f8f6f0">
+            <td style="padding:6px 10px;font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Total</td>
+            <td style="padding:6px 10px;text-align:right;font-family:'DM Mono',monospace;font-size:11px" id="uv-ink-total-cc">0</td>
+            <td style="padding:6px 10px;text-align:right;font-family:'DM Mono',monospace;font-size:11px;font-weight:600;color:var(--cost-text)" id="uv-ink-total-cost">R$ 0,0000</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <div>
+    <div class="sec-label">Tempo de Máquina</div>
+    <div class="uv-two-col" style="margin-bottom:10px">
+      <div class="fg">
+        <label>Tempo UV (hh:mm)</label>
+        <div class="uv-time-row">
+          <input type="number" id="uv-uv-h" placeholder="00" min="0" max="23" oninput="uvLiveCalc()">
+          <div class="uv-time-sep">:</div>
+          <input type="number" id="uv-uv-m" placeholder="00" min="0" max="59" oninput="uvLiveCalc()">
+        </div>
+      </div>
+      <div class="fg">
+        <label>Tempo Laser (hh:mm)</label>
+        <div class="uv-time-row">
+          <input type="number" id="uv-laser-h" placeholder="00" min="0" max="23" oninput="uvLiveCalc()">
+          <div class="uv-time-sep">:</div>
+          <input type="number" id="uv-laser-m" placeholder="00" min="0" max="59" oninput="uvLiveCalc()">
+        </div>
+      </div>
+    </div>
+    <div class="fg">
+      <label>Outros custos (R$)</label>
+      <input type="number" id="uv-outros" value="0" step="0.01" min="0" oninput="uvLiveCalc()">
+    </div>
+  </div>
+
+  <div>
+    <div class="sec-label">Margem de Lucro</div>
+    <div class="lucro-row">
+      <div class="lucro-preset" onclick="uvSetLucro(0.55,this)">
+        <div class="lp-pct">55%</div><div class="lp-qty">250 un</div>
+      </div>
+      <div class="lucro-preset lp-active" onclick="uvSetLucro(0.50,this)">
+        <div class="lp-pct">50%</div><div class="lp-qty">500 un</div>
+      </div>
+      <div class="lucro-preset" onclick="uvSetLucro(0.45,this)">
+        <div class="lp-pct">45%</div><div class="lp-qty">1.000 un</div>
+      </div>
+      <div class="lucro-preset" onclick="uvSetLucro(0.40,this)">
+        <div class="lp-pct">40%</div><div class="lp-qty">2.000 un</div>
+      </div>
+      <div class="lucro-preset" onclick="uvSetLucro(0.35,this)">
+        <div class="lp-pct">35%</div><div class="lp-qty">5.000 un</div>
+      </div>
+    </div>
+    <div class="fg" style="margin-top:8px">
+      <label>% manual do cliente</label>
+      <input type="number" id="uv-lucro-manual" placeholder="ex: 48" step="1" min="1" max="90" oninput="uvOnLucroManual()">
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:6px;margin-top:auto">
+    <button class="uv-btn-calc" onclick="uvCalcAll()">Calcular Preço Completo</button>
+    <button class="btn-reset" onclick="uvResetAll()">Limpar tudo</button>
+  </div>
+</div><!-- /uv-left -->
+
+<!-- UV RIGHT -->
+<div class="uv-right">
+
+  <div>
+    <div class="sec-label">Composição de Custos — Tempo Real</div>
+    <div class="cost-breakdown">
+      <div class="cost-title">Custo total do blank → custo por peça</div>
+      <div class="cost-row"><span class="cost-row-label">Base (material PU)</span><span class="cost-row-val" id="uv-cb-base">R$ 0,00</span></div>
+      <div class="cost-row"><span class="cost-row-label">Complemento</span><span class="cost-row-val" id="uv-cb-comp">R$ 0,00</span></div>
+      <div class="cost-row"><span class="cost-row-label">Tinta UV</span><span class="cost-row-val" id="uv-cb-tinta">R$ 0,00</span></div>
+      <div class="cost-row"><span class="cost-row-label">Máquina UV (R$22,76/h)</span><span class="cost-row-val" id="uv-cb-maq-uv">R$ 0,00</span></div>
+      <div class="cost-row"><span class="cost-row-label">Depreciação UV (R$6,89/h)</span><span class="cost-row-val" id="uv-cb-dep-uv">R$ 0,00</span></div>
+      <div class="cost-row"><span class="cost-row-label">Máquina Laser (R$22,76/h)</span><span class="cost-row-val" id="uv-cb-maq-laser">R$ 0,00</span></div>
+      <div class="cost-row"><span class="cost-row-label">Depreciação Laser (R$4,92/h)</span><span class="cost-row-val" id="uv-cb-dep-laser">R$ 0,00</span></div>
+      <div class="cost-row"><span class="cost-row-label">Outros</span><span class="cost-row-val" id="uv-cb-outros">R$ 0,00</span></div>
+      <div class="cost-row total-row"><span class="cost-row-label">Total do blank</span><span class="cost-row-val" id="uv-cb-total">R$ 0,00</span></div>
+      <div class="cost-row unit-row"><span class="cost-row-label">Custo/peça (÷ <span id="uv-cb-pieces">—</span> peças)</span><span class="cost-row-val" id="uv-cb-unit">R$ —</span></div>
+    </div>
+  </div>
+
+  <div>
+    <div class="sec-label">Custos Gerais Fixos — embutidos no preço</div>
+    <div class="overhead-grid">
+      <div class="oh-item"><div class="oh-pct">10%</div><div class="oh-label">Simples Nacional</div></div>
+      <div class="oh-item"><div class="oh-pct">3%</div><div class="oh-label">DDV</div></div>
+      <div class="oh-item"><div class="oh-pct">12%</div><div class="oh-label">Desp Adm Coml</div></div>
+      <div class="oh-item"><div class="oh-pct">5%</div><div class="oh-label">Desp Financ</div></div>
+    </div>
+    <div class="oh-total" style="margin-top:8px">
+      <span class="oh-total-label">Total overhead fixo</span>
+      <span class="oh-total-val">30%</span>
+    </div>
+  </div>
+
+  <div id="uv-result-section" style="display:none">
+    <div class="sec-label">Tabela de Preços por Quantidade</div>
+    <div class="uv-tbl-wrap">
+      <table class="uv-price-table">
+        <thead><tr><th>Quantidade</th><th style="text-align:center">Lucro</th><th>Vlr. Unitário</th><th>Vlr. Total</th></tr></thead>
+        <tbody id="uv-price-tbody"></tbody>
+      </table>
+    </div>
+    <div style="margin-top:14px">
+      <div class="formula-box">
+        <div class="formula-title">Fórmula aplicada</div>
+        <div class="formula-line">Custo/peça = <span id="uv-f-unit">—</span></div>
+        <div class="formula-line">Overhead fixo = <span>30%</span></div>
+        <div class="formula-line">Preço = custo ÷ (1 − 30% − lucro%) = custo ÷ <span id="uv-f-div">—</span></div>
+        <div class="formula-line" style="margin-top:6px;padding-top:6px;border-top:1px solid #333330">
+          Preço base (500 un, 50%): <em id="uv-f-base">—</em>
+        </div>
+      </div>
+    </div>
+    <div class="uv-note" style="margin-top:14px">
+      <p>
+        <strong>Overhead 30%</strong> (Simples Nacional + DDV + Desp Adm Coml + Desp Financ) embutido no preço final.<br>
+        <strong>Lucro %</strong> varia por quantidade — padrão 55% (250 un) → 35% (5.000 un). Ajuste conforme o cliente.<br>
+        <strong>Fórmula:</strong> Preço = Custo/peça ÷ (1 − 30% − Lucro%)
+      </p>
+    </div>
+    <div class="disc" style="margin-top:12px">
+      Orçamento válido por 15 dias · Prazo ~25 dias úteis · Frete por conta do cliente · ±10% nas quantidades
+    </div>
+  </div>
+
+  <div id="uv-empty" class="empty">
+    <div class="empty-icon">◉</div>
+    <p>Selecione o material,<br>informe as peças por blank<br>e os tempos de máquina.</p>
+  </div>
+
+</div><!-- /uv-right -->
+</div><!-- /uv-layout -->
+</div><!-- /tab-uv -->
 
 <script>
-// ── Load rules from external file ────────────────────────────────────────────
-function waitForRules(cb, attempts=0) {
-  if (window.OPEL_RULES) { cb(window.OPEL_RULES); return; }
-  if (attempts > 20) { document.getElementById('header-info').textContent = 'Erro ao carregar regras'; return; }
-  setTimeout(() => waitForRules(cb, attempts+1), 100);
+// ══════════════════════════════════════════════════════════════
+// TAB SWITCHING
+// ══════════════════════════════════════════════════════════════
+function switchTab(tab) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active','active-uv'));
+  document.getElementById(`tab-${tab}`).classList.add('active');
+  const btn = document.getElementById(`tab-btn-${tab}`);
+  btn.classList.add(tab === 'uv' ? 'active-uv' : 'active');
 }
 
+// ══════════════════════════════════════════════════════════════
+// RULES LOADER
+// ══════════════════════════════════════════════════════════════
 let P = {}, DIMS = {}, SURCHARGES = {}, META = {};
 
-waitForRules(rules => {
-  P = rules.PRICING;
-  DIMS = rules.DIMS;
-  SURCHARGES = rules.SURCHARGES;
-  META = rules.META;
+function waitForRules(cb, n=0) {
+  if (window.OPEL_RULES) { cb(window.OPEL_RULES); return; }
+  if (n > 20) { document.getElementById('header-info').textContent = 'Erro ao carregar regras'; return; }
+  setTimeout(() => waitForRules(cb, n+1), 100);
+}
 
-  // Update UI with meta info
+waitForRules(rules => {
+  P = rules.PRICING; DIMS = rules.DIMS; SURCHARGES = rules.SURCHARGES; META = rules.META;
   document.getElementById('header-info').textContent =
     `${META.total_price_points?.toLocaleString('pt-BR')} pts · ${META.updated} · ${META.version}`;
   document.getElementById('dsrc-label').textContent =
     `${META.total_quotes} orçamentos · Base ${META.base_year}`;
-
-  // Update surcharge labels from rules
+  document.getElementById('tab-badge-std').textContent =
+    `${META.total_price_points?.toLocaleString('pt-BR')} pts`;
   Object.entries(SURCHARGES).forEach(([id, s]) => {
     const lbl = document.getElementById('lbl-'+id);
     if (lbl && s.mult > 1) lbl.textContent = '+' + Math.round((s.mult-1)*100) + '%';
   });
 });
 
+// ══════════════════════════════════════════════════════════════
+// TAB 1 — ETIQUETAS PADRÃO
+// ══════════════════════════════════════════════════════════════
 const NAMES = {
   bordada_ad:'Bordada Alta Definição (AD)', bordada_dd:'Bordada Dupla Densidade (DD)',
   bordada_cetim:'Bordada em Cetim', bordada_tafeta:'Bordada Tafetá',
@@ -279,11 +663,9 @@ const NAMES = {
   pu_3d:'3D PU (Couro)', opellaser:'Opellaser (ABS/Metal)',
   transfer_dtf:'Transfer Digital DTF', metal_zamak:'Metal Zamak'
 };
-
 const FLAT_FOLD = ['nylon_calandrado','nylon_resinado','sarja','cetim_impresso','silicone','transfer_dtf','opellaser','metal_zamak','tag_couche','tag_triplex'];
 const TAG_ONLY  = ['tag_couche','tag_triplex'];
 const TECH_ONLY = ['opelprint','pu_3d','opellaser','transfer_dtf','metal_zamak'];
-
 let dimValid = true;
 
 function onPtChange() {
@@ -291,219 +673,150 @@ function onPtChange() {
   const d = DIMS[pt];
   const refBox = document.getElementById('dim-ref-box');
   if (pt && d) {
-    document.getElementById('dim-ref-range').textContent =
-      `Largura: ${d.wMin}–${d.wMax}mm  ·  Altura: ${d.hMin}–${d.hMax}mm`;
-    document.getElementById('dim-ref-examples').textContent =
-      `Mais comum: ${d.wQ[0]}–${d.wQ[1]}mm × ${d.hQ[0]}–${d.hQ[1]}mm`;
+    document.getElementById('dim-ref-range').textContent = `Largura: ${d.wMin}–${d.wMax}mm  ·  Altura: ${d.hMin}–${d.hMax}mm`;
+    document.getElementById('dim-ref-examples').textContent = `Mais comum: ${d.wQ[0]}–${d.wQ[1]}mm × ${d.hQ[0]}–${d.hQ[1]}mm`;
     refBox.style.display = 'block';
-    const wrap = document.getElementById('common-sizes-wrap');
-    document.getElementById('common-sizes').innerHTML =
-      d.sizes.map(s => `<div class="size-chip" onclick="fillSize('${s}')">${s}</div>`).join('');
-    wrap.style.display = 'block';
-  } else {
-    refBox.style.display = 'none';
-    document.getElementById('common-sizes-wrap').style.display = 'none';
-  }
+    document.getElementById('common-sizes').innerHTML = d.sizes.map(s => `<div class="size-chip" onclick="fillSize('${s}')">${s}</div>`).join('');
+    document.getElementById('common-sizes-wrap').style.display = 'block';
+  } else { refBox.style.display = 'none'; document.getElementById('common-sizes-wrap').style.display = 'none'; }
   document.getElementById('fold-grp').style.display = FLAT_FOLD.includes(pt) ? 'none' : 'block';
   document.getElementById('colors-grp').style.display = ['opelprint','pu_3d','metal_zamak'].includes(pt) ? 'none' : 'flex';
-  ['w-ver','w-hot','w-lam','w-fur'].forEach(id => {
-    document.getElementById(id).style.display = (TAG_ONLY.includes(pt)||TECH_ONLY.includes(pt)) ? 'flex' : 'none';
-  });
+  ['w-ver','w-hot','w-lam','w-fur'].forEach(id => document.getElementById(id).style.display = (TAG_ONLY.includes(pt)||TECH_ONLY.includes(pt)) ? 'flex' : 'none');
   document.getElementById('w-rel').style.display = TECH_ONLY.includes(pt) ? 'flex' : 'none';
   document.getElementById('w-df').style.display = ['opellaser','opelprint'].includes(pt) ? 'flex' : 'none';
   onDimChange();
 }
-
 function fillSize(s) {
   const [w,h] = s.split('x');
   document.getElementById('w').value = w;
   document.getElementById('h').value = h;
   onDimChange();
 }
-
 function onDimChange() {
   const pt = document.getElementById('pt').value;
   const w = parseFloat(document.getElementById('w').value);
   const h = parseFloat(document.getElementById('h').value);
-  const wEl = document.getElementById('w');
-  const hEl = document.getElementById('h');
+  const wEl = document.getElementById('w'), hEl = document.getElementById('h');
   const alertEl = document.getElementById('dim-alert');
   wEl.className = ''; hEl.className = '';
   alertEl.style.display = 'none'; alertEl.innerHTML = '';
   document.getElementById('area-disp').style.display = 'none';
-
   if (!w && !h) { dimValid = true; updateBtn(); return; }
-  if (!pt || !DIMS[pt]) {
-    if (w > 0 && h > 0) showArea(w, h);
-    dimValid = true; updateBtn(); return;
-  }
-
-  const d = DIMS[pt];
-  const msgs = []; let level = 'ok';
-  if (w > 0 && h > 0) {
+  if (!pt || !DIMS[pt]) { if(w>0&&h>0) showArea(w,h); dimValid=true; updateBtn(); return; }
+  const d = DIMS[pt]; const msgs=[]; let level='ok';
+  if (w>0 && h>0) {
     if (d.hard) {
-      if (w < d.wMin || w > d.wMax) { level='err'; msgs.push(`Largura fora do intervalo (${d.wMin}–${d.wMax}mm).`); }
-      if (h < d.hMin || h > d.hMax) { level='err'; msgs.push(`Altura fora do intervalo (${d.hMin}–${d.hMax}mm).`); }
+      if (w<d.wMin||w>d.wMax) { level='err'; msgs.push(`Largura fora do intervalo (${d.wMin}–${d.wMax}mm).`); }
+      if (h<d.hMin||h>d.hMax) { level='err'; msgs.push(`Altura fora do intervalo (${d.hMin}–${d.hMax}mm).`); }
     } else {
-      if (w < d.wMin || w > d.wMax) { level='warn'; msgs.push(`Largura ${w}mm fora do range habitual (${d.wMin}–${d.wMax}mm). Estimativa menos precisa.`); }
-      if (h < d.hMin || h > d.hMax) { if(level!=='err') level='warn'; msgs.push(`Altura ${h}mm fora do range habitual (${d.hMin}–${d.hMax}mm). Estimativa menos precisa.`); }
+      if (w<d.wMin||w>d.wMax) { level='warn'; msgs.push(`Largura ${w}mm fora do range habitual (${d.wMin}–${d.wMax}mm).`); }
+      if (h<d.hMin||h>d.hMax) { if(level!=='err')level='warn'; msgs.push(`Altura ${h}mm fora do range habitual.`); }
     }
     const swapTypes = ['bordada_ad','bordada_cetim','bordada_dd','nylon_calandrado','cetim_impresso','sarja','cetim_importado'];
-    if (swapTypes.includes(pt) && w > h && level === 'ok') {
-      level = 'warn';
-      msgs.push(`Largura (${w}mm) > Altura (${h}mm). Verifique se as dimensões estão corretas.`);
-    }
+    if (swapTypes.includes(pt) && w>h && level==='ok') { level='warn'; msgs.push(`Largura (${w}mm) > Altura (${h}mm) — verifique.`); }
     if (level==='err') { wEl.className='inp-err'; hEl.className='inp-err'; }
     else if (level==='warn') {
-      if (w < d.wMin || w > d.wMax) wEl.className='inp-warn';
-      if (h < d.hMin || h > d.hMax) hEl.className='inp-warn';
+      if (w<d.wMin||w>d.wMax) wEl.className='inp-warn';
+      if (h<d.hMin||h>d.hMax) hEl.className='inp-warn';
     } else { wEl.className='inp-ok'; hEl.className='inp-ok'; }
     if (msgs.length) {
       alertEl.innerHTML = `<div class="val-alert ${level}"><span class="val-icon">${level==='err'?'✕':'⚠'}</span><div>${msgs.join('<br>')}</div></div>`;
       alertEl.style.display = 'block';
     }
-    showArea(w, h);
-    dimValid = level !== 'err';
+    showArea(w,h); dimValid = level!=='err';
   }
   updateBtn();
 }
-
-function showArea(w, h) {
-  if (w>0 && h>0) {
-    const area = w*h;
+function showArea(w,h) {
+  if (w>0&&h>0) {
+    const area=w*h;
     document.getElementById('area-val').textContent = area.toFixed(0);
-    const pt = document.getElementById('pt').value;
-    const b = getBracket(pt, area);
-    document.getElementById('bracket-hint').textContent = b ? `· ${b.label} (${b.range})` : '';
-    document.getElementById('area-disp').style.display = 'block';
+    const pt=document.getElementById('pt').value;
+    const b=getBracket(pt,area);
+    document.getElementById('bracket-hint').textContent = b?`· ${b.label} (${b.range})`:'';
+    document.getElementById('area-disp').style.display='block';
   }
 }
-
 function updateBtn() { document.getElementById('btn-calc').disabled = !dimValid; }
-
-function getBracket(pt, area) {
-  const data = P[pt];
-  if (!data || !Array.isArray(data)) return null;
-  return data.find(b => area > b.min && area <= b.max) || data[data.length-1];
+function getBracket(pt,area) {
+  const data=P[pt]; if(!data||!Array.isArray(data)) return null;
+  return data.find(b=>area>b.min&&area<=b.max)||data[data.length-1];
 }
-
-function interp(pt_table, qty) {
-  const keys = Object.keys(pt_table).map(Number).sort((a,b)=>a-b);
-  if (!keys.length) return null;
-  if (qty <= keys[0]) return pt_table[keys[0]];
-  if (qty >= keys[keys.length-1]) return pt_table[keys[keys.length-1]];
-  for (let i=0; i<keys.length-1; i++) {
-    if (qty >= keys[i] && qty <= keys[i+1]) {
-      const t = (Math.log(qty)-Math.log(keys[i])) / (Math.log(keys[i+1])-Math.log(keys[i]));
-      return pt_table[keys[i]] + t*(pt_table[keys[i+1]]-pt_table[keys[i]]);
+function interp(tbl,qty) {
+  const keys=Object.keys(tbl).map(Number).sort((a,b)=>a-b);
+  if(!keys.length) return null;
+  if(qty<=keys[0]) return tbl[keys[0]];
+  if(qty>=keys[keys.length-1]) return tbl[keys[keys.length-1]];
+  for(let i=0;i<keys.length-1;i++) {
+    if(qty>=keys[i]&&qty<=keys[i+1]) {
+      const t=(Math.log(qty)-Math.log(keys[i]))/(Math.log(keys[i+1])-Math.log(keys[i]));
+      return tbl[keys[i]]+t*(tbl[keys[i+1]]-tbl[keys[i]]);
     }
   }
   return null;
 }
-
 function getQtyBreaks(pt) {
-  if (['opelprint','pu_3d'].includes(pt))       return [100,250,500,1000,2000,3000,5000,10000];
-  if (['opellaser','metal_zamak'].includes(pt))  return [100,250,500,1000,2000,5000];
-  if (['transfer_dtf'].includes(pt))             return [250,500,1000,2000,3000,5000];
-  if (['tag_couche','tag_triplex','cetim_importado'].includes(pt)) return [500,1000,1500,2000,3000,6000,10000,20000];
-  if (['bordada_dd','bordada_superbatida'].includes(pt)) return [3000,5000,6000,10000,20000];
+  if(['opelprint','pu_3d'].includes(pt))       return [100,250,500,1000,2000,3000,5000,10000];
+  if(['opellaser','metal_zamak'].includes(pt))  return [100,250,500,1000,2000,5000];
+  if(['transfer_dtf'].includes(pt))             return [250,500,1000,2000,3000,5000];
+  if(['tag_couche','tag_triplex','cetim_importado'].includes(pt)) return [500,1000,1500,2000,3000,6000,10000,20000];
+  if(['bordada_dd','bordada_superbatida'].includes(pt)) return [3000,5000,6000,10000,20000];
   return [1000,1500,2000,3000,6000,10000,20000];
 }
-
 function conf(n) {
-  if (n >= 60) return {cls:'c-high',txt:'Alta confiança'};
-  if (n >= 15) return {cls:'c-mid', txt:'Confiança média'};
-  return {cls:'c-low', txt:'Dados limitados'};
+  if(n>=60) return {cls:'c-high',txt:'Alta confiança'};
+  if(n>=15) return {cls:'c-mid', txt:'Confiança média'};
+  return {cls:'c-low',txt:'Dados limitados'};
 }
-function fmt(n) { return n.toFixed(4).replace('.',','); }
-function fmtBRL(n) { return n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function fmt4(n){ return n.toFixed(4).replace('.',','); }
+function fmtBRL(n){ return n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
 
 function calc() {
-  const pt = document.getElementById('pt').value;
-  if (!pt) { showErr('Selecione o tipo de produto.'); return; }
-  const w = parseFloat(document.getElementById('w').value);
-  const h = parseFloat(document.getElementById('h').value);
-  if (!w||!h||w<=0||h<=0) { showErr('Informe largura e altura.'); return; }
-  if (!dimValid) { showErr('Corrija as dimensões antes de calcular.'); return; }
-  const area = w*h;
-  const colors = parseInt(document.getElementById('colors').value)||1;
-  const fold = document.getElementById('fold').value;
-  const data = P[pt];
-  if (!data) { showErr('Produto sem dados. Verifique as regras.'); return; }
-
-  let priceTable, sampleN, bracketInfo;
-  if (Array.isArray(data)) {
-    const b = getBracket(pt, area);
-    if (!b || !Object.keys(b.prices).length) {
-      showErr(`Sem dados para área ${area.toFixed(0)}mm² neste produto. Consulte a equipe.`);
-      return;
-    }
-    priceTable = b.prices; sampleN = b.n; bracketInfo = b;
+  const pt=document.getElementById('pt').value;
+  if(!pt){showErr('Selecione o tipo de produto.');return;}
+  const w=parseFloat(document.getElementById('w').value);
+  const h=parseFloat(document.getElementById('h').value);
+  if(!w||!h||w<=0||h<=0){showErr('Informe largura e altura.');return;}
+  if(!dimValid){showErr('Corrija as dimensões.');return;}
+  const area=w*h, colors=parseInt(document.getElementById('colors').value)||1;
+  const fold=document.getElementById('fold').value;
+  const data=P[pt]; if(!data){showErr('Produto sem dados.');return;}
+  let priceTable,sampleN,bracketInfo;
+  if(Array.isArray(data)){
+    const b=getBracket(pt,area);
+    if(!b||!Object.keys(b.prices).length){showErr(`Sem dados para área ${area.toFixed(0)}mm².`);return;}
+    priceTable=b.prices;sampleN=b.n;bracketInfo=b;
   } else {
-    if (!Object.keys(data.prices).length) { showErr('Dados insuficientes.'); return; }
-    priceTable = data.prices; sampleN = data.n; bracketInfo = null;
+    if(!Object.keys(data.prices).length){showErr('Dados insuficientes.');return;}
+    priceTable=data.prices;sampleN=data.n;bracketInfo=null;
   }
-
-  let mult = 1.0;
-  const active = [];
-  for (const [id, s] of Object.entries(SURCHARGES)) {
-    const el = document.getElementById(id);
-    if (el && el.offsetParent !== null && el.checked && s.mult > 1) {
-      mult *= s.mult; active.push(s);
-    }
+  let mult=1.0; const active=[];
+  for(const[id,s] of Object.entries(SURCHARGES)){
+    const el=document.getElementById(id);
+    if(el&&el.offsetParent!==null&&el.checked&&s.mult>1){mult*=s.mult;active.push(s);}
   }
-  if (colors > 1) {
-    const cm = 1 + (colors-1)*0.08;
-    mult *= cm;
-    active.push({label:`+${colors-1} cor(es)`, mult: cm});
-  }
-
-  const breaks = getQtyBreaks(pt);
-  const rows = breaks.map(qty => {
-    const bp = interp(priceTable, qty);
-    if (bp===null) return null;
-    const up = bp*mult;
-    return {qty, up: Math.round(up*10000)/10000, tot: Math.round(qty*up*100)/100};
+  if(colors>1){const cm=1+(colors-1)*0.08;mult*=cm;active.push({label:`+${colors-1} cor(es)`,mult:cm});}
+  const breaks=getQtyBreaks(pt);
+  const rows=breaks.map(qty=>{
+    const bp=interp(priceTable,qty);if(bp===null)return null;
+    const up=bp*mult;return{qty,up:Math.round(up*10000)/10000,tot:Math.round(qty*up*100)/100};
   }).filter(Boolean);
-
-  if (!rows.length) { showErr('Não foi possível calcular preços.'); return; }
-
-  const c = conf(sampleN);
-  const specW = FLAT_FOLD.includes(pt) ? '—' : fold==='none'?'Sem dobra':fold==='lateral'?'Lateral':fold==='central'?'Central':'Central+Lateral';
-  const d = DIMS[pt];
-  const outsideRange = d && (w < d.wMin || w > d.wMax || h < d.hMin || h > d.hMax);
-  const hasNote = bracketInfo && bracketInfo.note;
-
-  document.getElementById('rp').innerHTML = `
+  if(!rows.length){showErr('Não foi possível calcular.');return;}
+  const c=conf(sampleN);
+  const specW=FLAT_FOLD.includes(pt)?'—':fold==='none'?'Sem dobra':fold==='lateral'?'Lateral':fold==='central'?'Central':'Central+Lateral';
+  const d=DIMS[pt]; const outside=d&&(w<d.wMin||w>d.wMax||h<d.hMin||h>d.hMax);
+  document.getElementById('rp').innerHTML=`
     <div class="res-head">
-      <div>
-        <div class="res-title">${NAMES[pt]||pt}</div>
-        <div class="res-sub">${w}×${h}mm · ${area.toFixed(0)}mm²${bracketInfo?' · '+bracketInfo.range:''}</div>
-      </div>
+      <div><div class="res-title">${NAMES[pt]||pt}</div>
+      <div class="res-sub">${w}×${h}mm · ${area.toFixed(0)}mm²${bracketInfo?' · '+bracketInfo.range:''}</div></div>
       <div class="conf ${c.cls}">${c.txt}</div>
     </div>
-
-    <div class="price-type-badge">
-      ◈ Preço de tabela · condições especiais a negociar com o consultor
-    </div>
-
-    ${outsideRange ? `<div class="val-alert warn" style="margin-bottom:14px"><span class="val-icon">⚠</span><div>Dimensões fora do range mais comum — estimativa por extrapolação.</div></div>` : ''}
-    ${hasNote ? `<div class="val-alert ok" style="margin-bottom:14px"><span class="val-icon">ℹ</span><div>${bracketInfo.note}</div></div>` : ''}
-
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>Quantidade</th><th>Vlr. Unitário</th><th>Vlr. Total</th></tr></thead>
-        <tbody>
-          ${rows.map((r,i)=>`
-            <tr class="${i===1?'t-hl':''}">
-              <td class="t-qty">${r.qty.toLocaleString('pt-BR')} un.</td>
-              <td class="t-unit">R$ ${fmt(r.up)}</td>
-              <td class="t-total">R$ ${fmtBRL(r.tot)}</td>
-            </tr>`).join('')}
-        </tbody>
-      </table>
-    </div>
-
+    <div class="price-type-badge">◈ Preço de tabela · condições especiais a negociar com o consultor</div>
+    ${outside?`<div class="val-alert warn" style="margin-bottom:14px"><span class="val-icon">⚠</span><div>Dimensões fora do range — estimativa por extrapolação.</div></div>`:''}
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Quantidade</th><th>Vlr. Unitário</th><th>Vlr. Total</th></tr></thead>
+      <tbody>${rows.map((r,i)=>`<tr class="${i===1?'t-hl':''}"><td class="t-qty">${r.qty.toLocaleString('pt-BR')} un.</td><td class="t-unit">R$ ${fmt4(r.up)}</td><td class="t-total">R$ ${fmtBRL(r.tot)}</td></tr>`).join('')}</tbody>
+    </table></div>
     <div class="spec-grid">
       <div class="spec-item"><div class="sk">Dimensão</div><div class="sv">${w}×${h}mm</div></div>
       <div class="spec-item"><div class="sk">Área</div><div class="sv">${area.toFixed(0)} mm²</div></div>
@@ -512,32 +825,202 @@ function calc() {
       <div class="spec-item"><div class="sk">Dobra</div><div class="sv">${specW}</div></div>
       <div class="spec-item"><div class="sk">Multiplicador</div><div class="sv">×${mult.toFixed(3)}</div></div>
     </div>
-
     ${active.length?`<div class="chips">${active.map(s=>`<div class="chip">${s.label} ×${s.mult.toFixed(2)}</div>`).join('')}</div>`:''}
-
-    <div class="note"><p>
-      <strong>Base:</strong> ${sampleN} orçamentos reais · ${NAMES[pt]||pt}<br>
-      <strong>Destaque:</strong> A linha em destaque (fundo escuro) é a quantidade de referência mais comum.<br>
-      <strong>Variação:</strong> ±10% nas quantidades. Preços são estimativas — variações por design, material e condições comerciais podem ocorrer.
-    </p></div>
-    <div class="disc">Orçamento válido por 15 dias · Prazo de produção a confirmar · Frete por conta do cliente · Pequenas variações de cor entre lotes podem ocorrer.</div>
+    <div class="note"><p><strong>Base:</strong> ${sampleN} orçamentos reais · ${NAMES[pt]||pt}<br><strong>Destaque:</strong> A linha em destaque é a quantidade de referência mais comum.<br><strong>Variação:</strong> ±10% nas quantidades.</p></div>
+    <div class="disc">Orçamento válido por 15 dias · Prazo a confirmar · Frete por conta do cliente · Variações de cor entre lotes podem ocorrer.</div>
   `;
 }
-
-function showErr(msg) {
-  document.getElementById('rp').innerHTML = `<div class="err-box">⚠ ${msg}</div>`;
+function showErr(msg){ document.getElementById('rp').innerHTML=`<div style="background:#fce4ec;border:1px solid #ef9a9a;border-radius:3px;padding:13px;color:#c62828;font-size:12px;line-height:1.6">⚠ ${msg}</div>`; }
+function resetForm(){
+  ['pt','colors','fold'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=id==='fold'?'none':id==='colors'?'1':'';});
+  ['w','h'].forEach(id=>{const el=document.getElementById(id);if(el){el.value='';el.className='';}});
+  Object.keys(SURCHARGES||{}).forEach(id=>{const el=document.getElementById(id);if(el)el.checked=false;});
+  ['area-disp','dim-ref-box','common-sizes-wrap','dim-alert'].forEach(id=>document.getElementById(id).style.display='none');
+  ['w-ver','w-hot','w-lam','w-fur','w-rel','w-df'].forEach(id=>document.getElementById(id).style.display='none');
+  dimValid=true; document.getElementById('btn-calc').disabled=false;
+  document.getElementById('rp').innerHTML=`<div class="empty"><div class="empty-icon">◈</div><p>Selecione o produto,<br>informe as dimensões<br>e clique em Calcular.</p></div>`;
 }
 
-function resetForm() {
-  ['pt','colors','fold'].forEach(id => { const el=document.getElementById(id); if(el) el.value=id==='fold'?'none':id==='colors'?'1':''; });
-  ['w','h'].forEach(id => { const el=document.getElementById(id); if(el){el.value='';el.className='';} });
-  Object.keys(SURCHARGES).forEach(id => { const el=document.getElementById(id); if(el) el.checked=false; });
-  ['area-disp','dim-ref-box','common-sizes-wrap','dim-alert'].forEach(id => document.getElementById(id).style.display='none');
-  ['w-ver','w-hot','w-lam','w-fur','w-rel','w-df'].forEach(id => document.getElementById(id).style.display='none');
-  dimValid = true;
-  document.getElementById('btn-calc').disabled = false;
-  document.getElementById('rp').innerHTML = `<div class="empty"><div class="empty-icon">◈</div><p>Selecione o produto,<br>informe as dimensões<br>e clique em Calcular.</p></div>`;
+// ══════════════════════════════════════════════════════════════
+// TAB 2 — UV / 3D PU
+// ══════════════════════════════════════════════════════════════
+const UV_RATE_MAQ_UV    = 22.76;
+const UV_RATE_DEP_UV    = 6.89;
+const UV_RATE_MAQ_LASER = 22.76;
+const UV_RATE_DEP_LASER = 4.92;
+const UV_RATE_INK       = 0.00097;
+const UV_OVERHEAD       = 0.30;
+const UV_COMP_DEFAULTS  = { termocolante: 26.78, dupla_face_3m: 51.75 };
+const UV_INKS = [
+  {id:'cyan',name:'Cyan',color:'#00bcd4'},{id:'magenta',name:'Magenta',color:'#e91e8c'},
+  {id:'amarelo',name:'Amarelo',color:'#ffc107'},{id:'preto',name:'Preto',color:'#212121'},
+  {id:'lcyan',name:'Light Cyan',color:'#80deea'},{id:'lmagenta',name:'Light Magenta',color:'#f48fb1'},
+  {id:'branco',name:'Branco',color:'#f5f5f5'},{id:'verniz',name:'Verniz UV',color:'#e8e0c8'},
+];
+const UV_LUCRO_TABLE = [{qty:250,l:0.55},{qty:500,l:0.50},{qty:1000,l:0.45},{qty:2000,l:0.40},{qty:5000,l:0.35}];
+let uvCurrentLucro = 0.50;
+
+function uvInit() {
+  const tbody = document.getElementById('uv-ink-tbody');
+  tbody.innerHTML = UV_INKS.map(ink => `
+    <tr>
+      <td style="padding:5px 10px;font-size:11px">
+        <span class="ink-swatch" style="background:${ink.color}"></span>${ink.name}
+      </td>
+      <td style="padding:4px 10px">
+        <input type="number" id="uv-ink-${ink.id}" value="0" min="0" step="0.001"
+               style="width:90px;text-align:right;padding:4px 6px;font-size:11px;font-family:'DM Mono',monospace"
+               oninput="uvUpdateInk();uvLiveCalc()">
+      </td>
+      <td style="padding:4px 10px;text-align:right;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)" id="uv-ink-cost-${ink.id}">R$ 0,0000</td>
+    </tr>
+  `).join('');
 }
+
+function uvOnMaterialChange() {
+  const sel = document.getElementById('uv-material');
+  const opt = sel.options[sel.selectedIndex];
+  document.getElementById('uv-custom-mat-wrap').style.display = (opt&&opt.value==='personalizado') ? 'block' : 'none';
+  uvLiveCalc();
+}
+function uvOnCompChange() {
+  const type = document.getElementById('uv-comp-type').value;
+  document.getElementById('uv-comp-wrap').style.display = (type!=='none'&&type!=='costura'&&type!=='personalizado') ? 'block' : 'none';
+  document.getElementById('uv-comp-fixed-wrap').style.display = (type==='personalizado') ? 'block' : 'none';
+  if (type !== 'none' && type !== 'costura' && type !== 'personalizado') {
+    document.getElementById('uv-comp-blank-cost').value = UV_COMP_DEFAULTS[type] || '';
+  }
+  uvLiveCalc();
+}
+function uvSetLucro(pct, el) {
+  uvCurrentLucro = pct;
+  document.querySelectorAll('.lucro-preset').forEach(p => p.classList.remove('lp-active'));
+  el.classList.add('lp-active');
+  document.getElementById('uv-lucro-manual').value = '';
+  uvLiveCalc();
+}
+function uvOnLucroManual() {
+  const v = parseFloat(document.getElementById('uv-lucro-manual').value);
+  if (!isNaN(v) && v>0 && v<100) {
+    uvCurrentLucro = v/100;
+    document.querySelectorAll('.lucro-preset').forEach(p => p.classList.remove('lp-active'));
+  }
+  uvLiveCalc();
+}
+function uvUpdateInk() {
+  let totalCc = 0;
+  UV_INKS.forEach(ink => {
+    const cc = parseFloat(document.getElementById(`uv-ink-${ink.id}`).value) || 0;
+    const cost = cc * UV_RATE_INK;
+    totalCc += cc;
+    document.getElementById(`uv-ink-cost-${ink.id}`).textContent = 'R$ ' + cost.toFixed(4).replace('.',',');
+  });
+  document.getElementById('uv-ink-total-cc').textContent = totalCc.toFixed(3);
+  document.getElementById('uv-ink-total-cost').textContent = 'R$ ' + (totalCc*UV_RATE_INK).toFixed(4).replace('.',',');
+}
+function uvGetCosts() {
+  const pieces = parseFloat(document.getElementById('uv-pieces').value) || 0;
+  const blanksQty = parseFloat(document.getElementById('uv-blanks-qty').value) || 1;
+  const sel = document.getElementById('uv-material');
+  const opt = sel.options[sel.selectedIndex];
+  const matCostBlank = (opt&&opt.value==='personalizado')
+    ? (parseFloat(document.getElementById('uv-custom-mat-cost').value)||0)
+    : (opt ? parseFloat(opt.dataset.cost)||0 : 0);
+  const matTotal = matCostBlank * blanksQty;
+
+  const compType = document.getElementById('uv-comp-type').value;
+  let compTotal = 0;
+  if (compType==='personalizado') {
+    compTotal = (parseFloat(document.getElementById('uv-comp-per-piece').value)||0) * (pieces||1);
+  } else if (compType!=='none'&&compType!=='costura') {
+    const bc = parseFloat(document.getElementById('uv-comp-blank-cost').value) || UV_COMP_DEFAULTS[compType]||0;
+    const bcQty = parseFloat(document.getElementById('uv-comp-blanks').value)||1;
+    compTotal = bc * bcQty;
+  }
+
+  const inkTotal = UV_INKS.reduce((s,ink) => s + (parseFloat(document.getElementById(`uv-ink-${ink.id}`).value)||0)*UV_RATE_INK, 0) * (pieces||1);
+
+  const uvH_val = (parseFloat(document.getElementById('uv-uv-h').value)||0) + (parseFloat(document.getElementById('uv-uv-m').value)||0)/60;
+  const laserH_val = (parseFloat(document.getElementById('uv-laser-h').value)||0) + (parseFloat(document.getElementById('uv-laser-m').value)||0)/60;
+  const maqUv = uvH_val * UV_RATE_MAQ_UV;
+  const depUv = uvH_val * UV_RATE_DEP_UV;
+  const maqLaser = laserH_val * UV_RATE_MAQ_LASER;
+  const depLaser = laserH_val * UV_RATE_DEP_LASER;
+  const outros = parseFloat(document.getElementById('uv-outros').value)||0;
+
+  const total = matTotal + compTotal + inkTotal + maqUv + depUv + maqLaser + depLaser + outros;
+  const unit = pieces > 0 ? total / pieces : 0;
+  return { matTotal, compTotal, inkTotal, maqUv, depUv, maqLaser, depLaser, outros, total, unit, pieces };
+}
+function uvFmtR(n,d=2){ return 'R$ '+n.toFixed(d).replace('.',','); }
+
+function uvLiveCalc() {
+  const c = uvGetCosts();
+  document.getElementById('uv-cb-base').textContent = uvFmtR(c.matTotal);
+  document.getElementById('uv-cb-comp').textContent = uvFmtR(c.compTotal);
+  document.getElementById('uv-cb-tinta').textContent = uvFmtR(c.inkTotal);
+  document.getElementById('uv-cb-maq-uv').textContent = uvFmtR(c.maqUv);
+  document.getElementById('uv-cb-dep-uv').textContent = uvFmtR(c.depUv);
+  document.getElementById('uv-cb-maq-laser').textContent = uvFmtR(c.maqLaser);
+  document.getElementById('uv-cb-dep-laser').textContent = uvFmtR(c.depLaser);
+  document.getElementById('uv-cb-outros').textContent = uvFmtR(c.outros);
+  document.getElementById('uv-cb-total').textContent = uvFmtR(c.total);
+  document.getElementById('uv-cb-pieces').textContent = c.pieces > 0 ? c.pieces : '—';
+  document.getElementById('uv-cb-unit').textContent = c.pieces > 0 ? uvFmtR(c.unit, 4) : 'informe peças/blank';
+}
+
+function uvCalcAll() {
+  const c = uvGetCosts();
+  if (!c.pieces) { document.getElementById('uv-pieces').focus(); document.getElementById('uv-pieces').style.borderColor='var(--accent)'; return; }
+  document.getElementById('uv-pieces').style.borderColor='';
+  uvLiveCalc();
+
+  const tbody = document.getElementById('uv-price-tbody');
+  tbody.innerHTML = UV_LUCRO_TABLE.map(row => {
+    const div = 1 - UV_OVERHEAD - row.l;
+    const unitPrice = div > 0 ? c.unit / div : 0;
+    const total = unitPrice * row.qty;
+    const isSelected = Math.abs(row.l - uvCurrentLucro) < 0.001;
+    return `<tr class="${isSelected?'uv-hl':''}">
+      <td class="t-qty">${row.qty.toLocaleString('pt-BR')} un.</td>
+      <td class="col-lucro">${(row.l*100).toFixed(0)}%</td>
+      <td class="t-unit">R$ ${c.unit>0?unitPrice.toFixed(4).replace('.',','):'—'}</td>
+      <td class="t-total">${c.unit>0?'R$ '+fmtBRL(total):'—'}</td>
+    </tr>`;
+  }).join('');
+
+  const selDiv = 1 - UV_OVERHEAD - uvCurrentLucro;
+  const basePrice = selDiv > 0 ? c.unit / selDiv : 0;
+  document.getElementById('uv-f-unit').textContent = `R$ ${c.unit.toFixed(4).replace('.',',')} (total R$ ${c.total.toFixed(2).replace('.',',')} ÷ ${c.pieces} peças)`;
+  document.getElementById('uv-f-div').textContent = `(1−30%−${(uvCurrentLucro*100).toFixed(0)}%) = ${selDiv.toFixed(2)}`;
+  document.getElementById('uv-f-base').textContent = `R$ ${basePrice.toFixed(4).replace('.',',')}`;
+
+  document.getElementById('uv-result-section').style.display = 'block';
+  document.getElementById('uv-empty').style.display = 'none';
+}
+
+function uvResetAll() {
+  document.getElementById('uv-material').value = '';
+  document.getElementById('uv-blanks-qty').value = '1';
+  document.getElementById('uv-pieces').value = '';
+  document.getElementById('uv-comp-type').value = 'none';
+  document.getElementById('uv-comp-wrap').style.display = 'none';
+  document.getElementById('uv-comp-fixed-wrap').style.display = 'none';
+  document.getElementById('uv-custom-mat-wrap').style.display = 'none';
+  ['uv-uv-h','uv-uv-m','uv-laser-h','uv-laser-m'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('uv-outros').value = '0';
+  document.getElementById('uv-lucro-manual').value = '';
+  UV_INKS.forEach(ink => document.getElementById(`uv-ink-${ink.id}`).value = '0');
+  uvCurrentLucro = 0.50;
+  document.querySelectorAll('.lucro-preset').forEach((p,i) => p.classList.toggle('lp-active', i===1));
+  uvUpdateInk(); uvLiveCalc();
+  document.getElementById('uv-result-section').style.display = 'none';
+  document.getElementById('uv-empty').style.display = 'flex';
+}
+
+// Init
+uvInit();
+uvLiveCalc();
 </script>
 </body>
 </html>
