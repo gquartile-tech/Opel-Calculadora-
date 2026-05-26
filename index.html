@@ -356,6 +356,7 @@ tr.uv-hl td.t-total { color: #7dd3a8 !important; }
       <label class="cb" id="w-fur"><input type="checkbox" id="a-fu"><span class="cbl">Furo (3mm)</span><span class="cbn" id="lbl-a-fu">+3%</span></label>
       <label class="cb" id="w-rel"><input type="checkbox" id="a-rl"><span class="cbl">Relevo (médio/alto)</span><span class="cbn">já incl.</span></label>
       <label class="cb" id="w-df"><input type="checkbox" id="a-df"><span class="cbl">Dupla face / Dupla fase</span><span class="cbn" id="lbl-a-df">+12%</span></label>
+      <label class="cb" id="w-can"><input type="checkbox" id="a-ca"><span class="cbl">Cantos arredondados</span><span class="cbn" id="lbl-a-ca">+3%</span></label>
     </div>
   </div>
 
@@ -647,6 +648,8 @@ waitForRules(rules => {
     const lbl = document.getElementById('lbl-'+id);
     if (lbl && s.mult > 1) lbl.textContent = '+' + Math.round((s.mult-1)*100) + '%';
   });
+  // Apply initial state (no product selected → hide all optional)
+  applyAdicionaisForProduct('');
 });
 
 // ══════════════════════════════════════════════════════════════
@@ -681,9 +684,8 @@ function onPtChange() {
   } else { refBox.style.display = 'none'; document.getElementById('common-sizes-wrap').style.display = 'none'; }
   document.getElementById('fold-grp').style.display = FLAT_FOLD.includes(pt) ? 'none' : 'block';
   document.getElementById('colors-grp').style.display = ['opelprint','pu_3d','metal_zamak'].includes(pt) ? 'none' : 'flex';
-  ['w-ver','w-hot','w-lam','w-fur'].forEach(id => document.getElementById(id).style.display = (TAG_ONLY.includes(pt)||TECH_ONLY.includes(pt)) ? 'flex' : 'none');
-  document.getElementById('w-rel').style.display = TECH_ONLY.includes(pt) ? 'flex' : 'none';
-  document.getElementById('w-df').style.display = ['opellaser','opelprint'].includes(pt) ? 'flex' : 'none';
+  // Show/hide adicionais based on product-specific rules
+  applyAdicionaisForProduct(pt);
   onDimChange();
 }
 function fillSize(s) {
@@ -756,7 +758,7 @@ function interp(tbl,qty) {
   return null;
 }
 function getQtyBreaks(pt) {
-  if(['opelprint','pu_3d'].includes(pt))       return [100,250,500,1000,2000,3000,5000,10000];
+  if(['opelprint','pu_3d'].includes(pt))       return [40,100,150,250,500,1000,2000,3000,5000,10000];
   if(['opellaser','metal_zamak'].includes(pt))  return [100,250,500,1000,2000,5000];
   if(['transfer_dtf'].includes(pt))             return [250,500,1000,2000,3000,5000];
   if(['tag_couche','tag_triplex','cetim_importado'].includes(pt)) return [500,1000,1500,2000,3000,6000,10000,20000];
@@ -770,6 +772,51 @@ function conf(n) {
 }
 function fmt4(n){ return n.toFixed(4).replace('.',','); }
 function fmtBRL(n){ return n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+
+
+// ── ADICIONAIS SEGMENTADOS POR PRODUTO ───────────────────────────────────────
+// All checkbox IDs and their wrapper elements
+const ADICIONAL_MAP = {
+  'a-tc': {wrapper: null,    label: 'Termocolante'},
+  'a-ce': {wrapper: null,    label: 'Corte especial'},
+  'a-mc': {wrapper: null,    label: 'Meio corte'},
+  'a-cp': {wrapper: null,    label: 'Corte pirógrafo'},
+  'a-vr': {wrapper: 'w-ver', label: 'Verniz / UV localizado'},
+  'a-hs': {wrapper: 'w-hot', label: 'Hot Stamping'},
+  'a-lm': {wrapper: 'w-lam', label: 'Laminado fosco / Prolan'},
+  'a-fu': {wrapper: 'w-fur', label: 'Furo (3mm)'},
+  'a-rl': {wrapper: 'w-rel', label: 'Relevo (médio/alto)'},
+  'a-df': {wrapper: 'w-df',  label: 'Dupla face'},
+  'a-ca': {wrapper: 'w-can', label: 'Cantos arredondados'},
+};
+const ALL_ADICIONAIS = Object.keys(ADICIONAL_MAP);
+
+function applyAdicionaisForProduct(pt) {
+  // Get allowed adicionais for this product from rules
+  const allowed = (P && P['__adicionais'] && P['__adicionais'][pt]) 
+    ? P['__adicionais'][pt] 
+    : (window.OPEL_RULES && window.OPEL_RULES.ADICIONAIS_BY_PRODUCT && window.OPEL_RULES.ADICIONAIS_BY_PRODUCT[pt])
+      ? window.OPEL_RULES.ADICIONAIS_BY_PRODUCT[pt]
+      : [];
+
+  ALL_ADICIONAIS.forEach(id => {
+    const info = ADICIONAL_MAP[id];
+    const isAllowed = allowed.includes(id);
+    const el = document.getElementById(id);
+    const wrapper = info.wrapper ? document.getElementById(info.wrapper) : null;
+    const row = wrapper || (el ? el.closest('.cb') : null);
+    if (row) {
+      row.style.display = isAllowed ? 'flex' : 'none';
+      if (!isAllowed && el) el.checked = false;
+    } else if (el) {
+      const cb = el.closest('.cb');
+      if (cb) {
+        cb.style.display = isAllowed ? 'flex' : 'none';
+        if (!isAllowed) el.checked = false;
+      }
+    }
+  });
+}
 
 function calc() {
   const pt=document.getElementById('pt').value;
