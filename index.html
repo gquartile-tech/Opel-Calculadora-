@@ -346,10 +346,10 @@ tr.uv-hl td.t-total { color: #7dd3a8 !important; }
   <div id="add-sec">
     <div class="sec-label">Adicionais & Acabamentos</div>
     <div class="cb-group">
-      <label class="cb"><input type="checkbox" id="a-tc"><span class="cbl">Termocolante</span><span class="cbn" id="lbl-a-tc">+10%</span></label>
-      <label class="cb"><input type="checkbox" id="a-ce"><span class="cbl">Corte especial</span><span class="cbn" id="lbl-a-ce">+70%</span></label>
-      <label class="cb"><input type="checkbox" id="a-mc"><span class="cbl">Meio corte</span><span class="cbn" id="lbl-a-mc">+5%</span></label>
-      <label class="cb"><input type="checkbox" id="a-cp"><span class="cbl">Corte pirógrafo</span><span class="cbn" id="lbl-a-cp">+8%</span></label>
+      <label class="cb" id="w-tc"><input type="checkbox" id="a-tc"><span class="cbl">Termocolante</span><span class="cbn" id="lbl-a-tc">+10%</span></label>
+      <label class="cb" id="w-ce"><input type="checkbox" id="a-ce"><span class="cbl">Corte especial</span><span class="cbn" id="lbl-a-ce">+70%</span></label>
+      <label class="cb" id="w-mc"><input type="checkbox" id="a-mc"><span class="cbl">Meio corte</span><span class="cbn" id="lbl-a-mc">+5%</span></label>
+      <label class="cb" id="w-cp"><input type="checkbox" id="a-cp"><span class="cbl">Corte pirógrafo</span><span class="cbn" id="lbl-a-cp">+8%</span></label>
       <label class="cb" id="w-ver"><input type="checkbox" id="a-vr"><span class="cbl">Verniz / UV localizado</span><span class="cbn" id="lbl-a-vr">+8%</span></label>
       <label class="cb" id="w-hot"><input type="checkbox" id="a-hs"><span class="cbl">Hot Stamping</span><span class="cbn" id="lbl-a-hs">+15%</span></label>
       <label class="cb" id="w-lam"><input type="checkbox" id="a-lm"><span class="cbl">Laminado fosco / Prolan</span><span class="cbn" id="lbl-a-lm">+8%</span></label>
@@ -649,7 +649,8 @@ waitForRules(rules => {
     if (lbl && s.mult > 1) lbl.textContent = '+' + Math.round((s.mult-1)*100) + '%';
   });
   // Apply initial state (no product selected → hide all optional)
-  applyAdicionaisForProduct('');
+  // Hide all adicionais wrappers on reset
+  Object.values({'a-tc':'w-tc','a-ce':'w-ce','a-mc':'w-mc','a-cp':'w-cp','a-vr':'w-ver','a-hs':'w-hot','a-lm':'w-lam','a-fu':'w-fur','a-rl':'w-rel','a-df':'w-df','a-ca':'w-can'}).forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
 });
 
 // ══════════════════════════════════════════════════════════════
@@ -775,45 +776,25 @@ function fmtBRL(n){ return n.toLocaleString('pt-BR',{minimumFractionDigits:2,max
 
 
 // ── ADICIONAIS SEGMENTADOS POR PRODUTO ───────────────────────────────────────
-// All checkbox IDs and their wrapper elements
-const ADICIONAL_MAP = {
-  'a-tc': {wrapper: null,    label: 'Termocolante'},
-  'a-ce': {wrapper: null,    label: 'Corte especial'},
-  'a-mc': {wrapper: null,    label: 'Meio corte'},
-  'a-cp': {wrapper: null,    label: 'Corte pirógrafo'},
-  'a-vr': {wrapper: 'w-ver', label: 'Verniz / UV localizado'},
-  'a-hs': {wrapper: 'w-hot', label: 'Hot Stamping'},
-  'a-lm': {wrapper: 'w-lam', label: 'Laminado fosco / Prolan'},
-  'a-fu': {wrapper: 'w-fur', label: 'Furo (3mm)'},
-  'a-rl': {wrapper: 'w-rel', label: 'Relevo (médio/alto)'},
-  'a-df': {wrapper: 'w-df',  label: 'Dupla face'},
-  'a-ca': {wrapper: 'w-can', label: 'Cantos arredondados'},
+// Maps checkbox ID → wrapper label ID (all labels now have IDs)
+const ADICIONAL_WRAPPERS = {
+  'a-tc':'w-tc','a-ce':'w-ce','a-mc':'w-mc','a-cp':'w-cp',
+  'a-vr':'w-ver','a-hs':'w-hot','a-lm':'w-lam','a-fu':'w-fur',
+  'a-rl':'w-rel','a-df':'w-df','a-ca':'w-can'
 };
-const ALL_ADICIONAIS = Object.keys(ADICIONAL_MAP);
 
 function applyAdicionaisForProduct(pt) {
-  // Get allowed adicionais for this product from rules
-  const allowed = (P && P['__adicionais'] && P['__adicionais'][pt]) 
-    ? P['__adicionais'][pt] 
-    : (window.OPEL_RULES && window.OPEL_RULES.ADICIONAIS_BY_PRODUCT && window.OPEL_RULES.ADICIONAIS_BY_PRODUCT[pt])
-      ? window.OPEL_RULES.ADICIONAIS_BY_PRODUCT[pt]
-      : [];
+  // Get allowed list from rules (loaded async — safe because rules fire this after load)
+  const byProd = window.OPEL_RULES && window.OPEL_RULES.ADICIONAIS_BY_PRODUCT;
+  const allowed = (byProd && byProd[pt]) ? byProd[pt] : [];
 
-  ALL_ADICIONAIS.forEach(id => {
-    const info = ADICIONAL_MAP[id];
-    const isAllowed = allowed.includes(id);
-    const el = document.getElementById(id);
-    const wrapper = info.wrapper ? document.getElementById(info.wrapper) : null;
-    const row = wrapper || (el ? el.closest('.cb') : null);
-    if (row) {
-      row.style.display = isAllowed ? 'flex' : 'none';
-      if (!isAllowed && el) el.checked = false;
-    } else if (el) {
-      const cb = el.closest('.cb');
-      if (cb) {
-        cb.style.display = isAllowed ? 'flex' : 'none';
-        if (!isAllowed) el.checked = false;
-      }
+  Object.entries(ADICIONAL_WRAPPERS).forEach(([cbId, wrapperId]) => {
+    const wrapper = document.getElementById(wrapperId);
+    const cb = document.getElementById(cbId);
+    const isAllowed = allowed.includes(cbId);
+    if (wrapper) {
+      wrapper.style.display = isAllowed ? 'flex' : 'none';
+      if (!isAllowed && cb) cb.checked = false;
     }
   });
 }
@@ -883,7 +864,7 @@ function resetForm(){
   ['w','h'].forEach(id=>{const el=document.getElementById(id);if(el){el.value='';el.className='';}});
   Object.keys(SURCHARGES||{}).forEach(id=>{const el=document.getElementById(id);if(el)el.checked=false;});
   ['area-disp','dim-ref-box','common-sizes-wrap','dim-alert'].forEach(id=>document.getElementById(id).style.display='none');
-  ['w-ver','w-hot','w-lam','w-fur','w-rel','w-df'].forEach(id=>document.getElementById(id).style.display='none');
+  Object.values({'a-tc':'w-tc','a-ce':'w-ce','a-mc':'w-mc','a-cp':'w-cp','a-vr':'w-ver','a-hs':'w-hot','a-lm':'w-lam','a-fu':'w-fur','a-rl':'w-rel','a-df':'w-df','a-ca':'w-can'}).forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
   dimValid=true; document.getElementById('btn-calc').disabled=false;
   document.getElementById('rp').innerHTML=`<div class="empty"><div class="empty-icon">◈</div><p>Selecione o produto,<br>informe as dimensões<br>e clique em Calcular.</p></div>`;
 }
