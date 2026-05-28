@@ -636,8 +636,11 @@ function waitForRules(cb, n=0) {
   setTimeout(() => waitForRules(cb, n+1), 100);
 }
 
+let ADICIONAIS_BY_PRODUCT = {};  // populated when rules load
+
 waitForRules(rules => {
   P = rules.PRICING; DIMS = rules.DIMS; SURCHARGES = rules.SURCHARGES; META = rules.META;
+  ADICIONAIS_BY_PRODUCT = rules.ADICIONAIS_BY_PRODUCT || {};
   document.getElementById('header-info').textContent =
     `${META.total_price_points?.toLocaleString('pt-BR')} pts · ${META.updated} · ${META.version}`;
   document.getElementById('dsrc-label').textContent =
@@ -784,9 +787,8 @@ const ADICIONAL_WRAPPERS = {
 };
 
 function applyAdicionaisForProduct(pt) {
-  // Get allowed list from rules (loaded async — safe because rules fire this after load)
-  const byProd = window.OPEL_RULES && window.OPEL_RULES.ADICIONAIS_BY_PRODUCT;
-  const allowed = (byProd && byProd[pt]) ? byProd[pt] : [];
+  // Uses ADICIONAIS_BY_PRODUCT populated when rules loaded
+  const allowed = ADICIONAIS_BY_PRODUCT[pt] || [];
 
   Object.entries(ADICIONAL_WRAPPERS).forEach(([cbId, wrapperId]) => {
     const wrapper = document.getElementById(wrapperId);
